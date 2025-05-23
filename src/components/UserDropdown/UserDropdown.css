@@ -1,0 +1,192 @@
+.user-dropdown-container {
+    position: relative;
+    display: inline-block;
+}
+
+.user-dropdown-button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #333;
+    font-size: 14px;
+    transition: color 0.2s ease;
+}
+
+.user-dropdown-button:hover {
+    color: #666;
+}
+
+.user-dropdown-button svg {
+    width: 20px;
+    height: 20px;
+}
+
+/* Reusing HeaderMenuIcons.css styles */
+.dropdown-content {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    width: 320px;
+    background-color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    margin-top: 10px;
+    padding: 20px;
+    animation: fadeIn 0.2s ease;
+}
+
+/* Login Form Styles - reusing login-container styles */
+.login-form {
+    width: 100%;
+}
+
+.login-form h2 {
+    text-align: center;
+    margin-top: 0;
+    margin-bottom: 20px;
+}
+
+.error-message {
+    color: #dc3545;
+    margin-bottom: 15px;
+    font-size: 14px;
+    text-align: center;
+}
+
+/* Reusing form-group styles */
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    font-size: var(--fontSize);
+    font-weight: var(--fontWeight);
+}
+
+.form-group input {
+    padding: 12px;
+    border: 2px solid black;
+    font-size: var(--fontSize);
+    border-radius: 2px;
+    width: 100%;
+}
+
+/* Sign in button styles */
+.sign-in-button {
+    background-color: var(--primary-color);
+    color: var(--secondary-color);
+    border: none;
+    padding: 12px;
+    font-size: var(--fontSize);
+    font-weight: var(--fontWeightXL);
+    cursor: pointer;
+    text-transform: uppercase;
+    width: 120px;
+    align-self: center;
+}
+
+.login-footer {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.login-footer a {
+    color: #666;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.login-footer a:hover {
+    color: #333;
+}
+
+.divider {
+    text-align: center;
+    position: relative;
+    font-weight: normal;
+    font-size: var(--fontSize);
+    margin: 15px 0;
+}
+
+.social-login-button {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.social-login-button.facebook {
+    color: #1877f2;
+}
+
+.social-login-button.google {
+    color: #db4437;
+}
+
+.social-login-button:hover {
+    background: #f5f5f5;
+}
+
+.register-link {
+    margin-top: 15px;
+    font-size: 14px;
+}
+
+.register-link a {
+    color: #000;
+    font-weight: 500;
+}
+
+/* User Menu Styles after login */
+.user-menu {
+    padding: 8px 0;
+}
+
+.menu-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    width: 100%;
+    border: none;
+    background: none;
+    color: #333;
+    font-size: 14px;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.menu-item:hover {
+    background-color: #f5f5f5;
+}
+
+.menu-item svg {
+    color: #666;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+} 

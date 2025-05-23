@@ -1,0 +1,372 @@
+/* Container tổng thể cho trang chủ */
+.homepageContainer {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.sectionProductShowCase {
+    padding: var(--paddingTop) var(--paddingRight) var(--paddingBottom) var(--paddingLeft);
+    --gridColumnCount: 2;
+    --gridRowGap: 30px;
+    --backgroundColor: white;
+    --fontColor: black;
+    --widthGridImage: 610px;
+    --widthGridItem: 292px;
+    --widthImg: 100%;
+    --heightImg: 100%;
+    --heightGridImage: 350px;
+    --heightGridItem: 250px;
+    --paddingTopItemCard: 15px;
+    --paddingBottomItemCard: 15px;
+    --paddingLeftItemCard: 15px;
+    --paddingRightItemCard: 15px;
+    width: 100%;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.sectionProductContainer {
+    max-width: var(--section-max-width);
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.sectionProductHeader {
+    display: flex;
+    align-items: center;
+    gap: var(--gapXL);
+    width: 100%;
+    margin-bottom: 50px;
+    box-sizing: border-box;
+}
+
+.sectionTitle {
+    margin: 0;
+}
+
+.sectionSeeAll {
+    color: var(--fontColor);
+    text-decoration: none;
+}
+
+.sectionSeeAll:hover {
+    text-decoration: underline;
+}
+
+.sectionProductGrid {
+    display: grid;
+    justify-content: stretch;
+    grid-template-columns: repeat(var(--gridColumnCount), 1fr);
+    gap: var(--gridRowGap);
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.sectionGridImage {
+    position: relative;
+    width: var(--widthGridImage);
+    height: var(--heightGridImage);
+}
+
+.sectionGridImage img {
+    width: var(--widthImg);
+    height: var(--heightImg);
+    object-fit: cover;
+}
+
+.gridButton {
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 12px 25px;
+    color: var(--fontColor);
+    border: 2px solid var(--fontColor);
+    cursor: pointer;
+    font-weight: var(--fontWeightXL);
+    font-size: var(--fontSizeXL);
+}
+
+.sectionGridItem {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--gapXXL);
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.productItemCard {
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.3s, box-shadow 0.3s;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.productItemCard:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.productImage {
+    width: var(--widthGridItem);
+    height: var(--heightGridItem);
+}
+
+.productImage img {
+    width: var(--widthImg);
+    height: var(--heightImg);
+    object-fit: cover;
+}
+
+.productInfo {
+    padding: var(--paddingTopItemCard) var(--paddingRightItemCard) 0 var(--paddingLeftItemCard);
+}
+
+.titleBrand {
+    margin-bottom: 15px;
+}
+
+.title {
+    font-size: var(--fontSizeXXL);
+    margin: 0 0 5px 0;
+    font-weight: var(--fontWeightXL);
+}
+
+.brand {
+    font-size: var(--fontSize);
+    color: var(--fontColor);
+    margin: 0;
+    font-weight: var(--fontWeight);
+}
+
+.priceAndDiscount {
+    display: flex;
+    align-items: center;
+    gap: var(--gapL);
+}
+
+.oldPrice {
+    text-decoration: line-through;
+    color: #999;
+    font-size: var(--fontSize);
+}
+
+.newPrice {
+    font-weight: var(--fontWeightXL);
+    font-size: var(--fontSize);
+}
+
+.discount {
+    margin: 0;
+    color: #e74c3c;
+    font-size: var(--fontSize);
+    font-weight: var(--fontWeightXL);
+}
+
+.productImage,
+.productInfo,
+.gridButton {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* Responsive adjustments */
+@media (max-width: 992px) {
+    .sectionProductContainer {
+        padding: 0 40px;
+    }
+
+    .sectionProductGrid {
+        grid-template-columns: 1fr;
+    }
+    
+    .sectionGridImage {
+        width: 100%;
+        height: 400px;
+    }
+    
+    .sectionGridItem {
+        grid-template-columns: 1fr 1fr;
+        gap: var(--gapXL);
+    }
+    
+    .productImage {
+        width: 100%;
+        height: 220px;
+    }
+}
+
+@media (max-width: 768px) {
+    .sectionProductContainer {
+        padding: 0 20px;
+    }
+
+    .sectionProductGrid {
+        grid-template-columns: 1fr;
+        --gridRowGap: 30px;
+    }
+    
+    .sectionGridImage {
+        height: 300px;
+    }
+    
+    .sectionGridItem {
+        grid-template-columns: 1fr;
+        gap: var(--gapL);
+    }
+    
+    .productImage {
+        height: 200px;
+    }
+    
+    .title {
+        font-size: var(--fontSizeXL);
+    }
+}
+
+/* Grid 4 cột */
+/* .productGrid4Columns {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--gapXL);
+    margin-bottom: 40px;
+}
+
+.categoryTag {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    background-color: #000;
+    color: #fff;
+    padding: 5px 10px;
+    font-size: 12px;
+    font-weight: 600;
+} */
+
+/* Banner section */
+.sectionBanner {
+    display: flex;
+    position: relative;
+    width: 100%;
+    height: 200px;
+    background-color: #f4f4f4;
+    margin-top: 30px;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+.bannerImageContainer {
+    width: var(--widthImg);
+    height: var(--heightImg);
+    opacity: 0.2;
+}
+
+.bannerImageContainer img {
+    width: var(--widthImg);
+    height: var(--heightImg);
+    object-fit: cover;
+}
+
+.bannerContent {
+    position: absolute;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: var(--widthImg);
+    height: var(--heightImg);
+    padding: 0 60px;
+}
+
+.bannerText {
+    text-align: left;
+}
+
+.bannerTitle {
+    font-size: 48px;
+    font-weight: var(--fontWeightXL);
+    margin: 0;
+    line-height: 1;
+}
+
+.bannerSubtitle {
+    font-size: 24px;
+    margin: 5px 0 0 0;
+}
+
+.bannerButton {
+    border: 2px solid var(--fontColor);
+    padding: 12px 25px;
+    font-size: var(--fontSizeXL);
+    font-weight: var(--fontWeightXL);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.gridButton:hover,
+.bannerButton:hover {
+    background-color: #000;
+    color: #fff;
+}
+
+/* Cập nhật responsive cho sectionGridItem 4 cột */
+@media (max-width: 1100px) {
+    .sectionGridItem[style*="repeat(4, 1fr)"] {
+        grid-template-columns: repeat(2, 1fr) !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .sectionGridItem[style*="repeat(4, 1fr)"] {
+        grid-template-columns: 1fr !important;
+    }
+}
+
+/* Banner responsive */
+@media (max-width: 768px) {
+    .bannerContent {
+        flex-direction: column;
+        justify-content: center;
+        padding: 20px;
+        text-align: center;
+    }
+    
+    .bannerText {
+        margin-bottom: 20px;
+        text-align: center;
+    }
+    
+    .bannerTitle {
+        font-size: 32px;
+    }
+    
+    .bannerSubtitle {
+        font-size: var(--fontSizeXXL);
+    }
+}
+
+/* Đảm bảo các section cùng kích thước */
+@media (min-width: 1024px) {
+    .sectionProductShowCase {
+        min-width: 1024px;
+    }
+}
+
+/* Đảm bảo responsive với màn hình lớn */
+@media (min-width: 1400px) {
+    .sectionProductShowCase {
+        padding-left: calc(var(--paddingLeftHeader) + 20px);
+        padding-right: calc(var(--paddingRightHeader) + 20px);
+    }
+}
+
+

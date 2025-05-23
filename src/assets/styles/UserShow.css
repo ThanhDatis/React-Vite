@@ -1,0 +1,109 @@
+.sectionUserShowCase {
+    padding: var(--paddingTop) var(--paddingRight) var(--paddingBottom) var(--paddingLeft);
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-sizing: border-box;
+}
+.sectionUserContainer {
+    max-width: var(--section-max-width);
+    width: 100%;
+    margin: 0 auto;
+    padding: 0;
+    box-sizing: border-box;
+  }
+.sectionUserHeader {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: var(--gapXL);
+    margin-bottom: 50px;
+    box-sizing: border-box;
+}
+.userGrid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 25px;
+    width: 100%;
+  }
+.userCard {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 25px 15px;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+  
+  .userCard:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+  }
+  .userAvatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-bottom: 15px;
+  }
+  
+  .userAvatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .userName {
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0 0 5px 0;
+    text-align: center;
+  }
+  
+  .userUsername {
+    color: #666;
+    font-size: 14px;
+    margin-bottom: 15px;
+    text-align: center;
+  }
+  
+  .userSocialIcons {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  .userShopButton {
+    background-color: #000;
+    color: #fff;
+    border: none;
+    padding: 12px 20px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .userShopButton:hover {
+    background-color: #333;
+  }
+  /* Responsive */
+@media (max-width: 1024px) {
+    .userGrid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .userGrid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .userGrid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+

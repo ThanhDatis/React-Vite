@@ -1,0 +1,39 @@
+:root {
+  --section-max-width: 1300px;
+  --fontSize: 14px;
+  --fontSizeXL: 16px;
+  --fontSizeXXL: 18px;
+  --fontWeight: 500;
+  --fontWeightXL: 600;
+  /* Gap */
+  --gapL: 15px;
+  --gapXL: 20px;
+  --gapXXL: 25px;
+  /* Padding */
+  --paddingLeft: 100px;
+  --paddingRight: 100px;
+  --paddingTop: 50px;
+  --paddingBottom: 50px;
+  /* Margin */
+  --marginBottom: 50px;
+  --marginTop: 50px;
+  --marginLeft: 50px;
+  --marginRight: 50px;
+  /* Padding Header */
+  --paddingTopHeader: 20px;
+  --paddingBottomHeader: 20px;
+  --paddingLeftHeader: 80px;
+  --paddingRightHeader: 80px;
+}
+
+* {
+  box-sizing: border-box;
+}
+body {
+  overflow-x: hidden;  /* Ngăn thanh cuộn ngang */
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+  background-color: white;
+  color: var(--primary-color);
+}

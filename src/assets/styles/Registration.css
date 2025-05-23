@@ -1,0 +1,185 @@
+.registration-page {
+    width: 100%;
+    padding: 0 100px;
+    margin: 20px 0;
+}
+
+.breadcumb {
+    display: flex;
+    align-items: center;
+    max-width: 1000px;
+    margin: 0;
+}
+
+.breadcumb a {
+    color: #333;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.breadcumb a:hover {
+    text-decoration: underline;
+}
+
+.breadcumb-icon {
+    margin: 0 8px;
+}
+
+.registration-page-title {
+    font-size: 24px;
+    font-weight: bold;
+    max-width: 1000px;
+}
+
+.registration-content {
+    padding: 40px 120px;
+    width: 100%;
+    max-width: 1000px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.registration-socialButton {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    width: 100%;
+}
+
+.registration-socialButton button {
+    padding: 10px 20px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+/* Remove the previous ::before content */
+.registration-socialButton button::before {
+    content: none;
+}
+
+.registration-socialButton svg {
+    display: inline-flex;
+    margin-right: 10px;
+    /* text-align: center; */
+    /* justify-content: center; */
+    /* align-items: center; */
+}
+
+.registration-divider {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+    margin: 30px 0;
+    width: 100%;
+}
+
+.registration-section-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 15px;
+    align-self: center;
+}
+
+.registration-upload {
+    margin-bottom: 30px;
+    display: flex;
+    justify-content: center;
+}
+
+.registration-upload-image {
+    border: 2px solid #ddd;
+    width: 100px;
+    height: 100px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.registration-upload-image p {
+    font-size: 12px;
+    color: #777;
+}
+
+.registration-form-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.registration-form {
+    margin-bottom: 50px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    width: 100%;
+}
+
+.registration-form h2 {
+    font-size: 18px;
+    grid-column: span 2;
+    margin: 0;
+}
+
+.registration-form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.registration-form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 14px;
+}
+
+.registration-form-group label::after {
+    content: "*";
+    color: red;
+    margin-left: 3px;
+}
+
+.registration-form-group input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid black;
+    border-radius: 3px;
+    height: 40px;
+}
+
+.registration-button {
+    background-color: black;
+    color: white;
+    border: none;
+    padding: 12px 40px;
+    border-radius: 3px;
+    font-size: 16px;
+    cursor: pointer;
+    text-transform: uppercase;
+    font-weight: bold;
+    margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+    .registration-page {
+        padding: 0 20px;
+    }
+    
+    .registration-form-container {
+        grid-template-columns: 1fr;
+    }
+    
+    .registration-socialButton {
+        flex-direction: column;
+        align-items: center;
+    }
+} 
