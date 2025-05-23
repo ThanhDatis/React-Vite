@@ -11,8 +11,8 @@ export default function UserAccountContent () {
             path: '/',
         },
         {
-            label: 'User Account',
-            path: '/user-account',
+            label: 'User Account'
+            // path: '/user-account',
         }
     ];
 
