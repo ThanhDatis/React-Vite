@@ -1,6 +1,7 @@
+/* User Account Page Layout */
 .user-account-page {
-    padding: var(--paddingTop) var(--paddingRight) var(--paddingBottom) var(--paddingLeft);
-    background-color: var(--background-color);
+    padding: 20px 0;
+    background-color: var(--background-color, #f5f5f5);
     min-height: calc(100vh - 200px);
 }
 
@@ -10,56 +11,192 @@
     padding: 0 20px;
 }
 
-.user-account-content {
-    padding: 20px;
-    max-width: 1200px;
-    margin: 0 auto;
+.user-account-layout {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+    overflow: hidden;
 }
 
-.user-account-content h1 {
-    color: var(--primary-color, #333);
-    margin-bottom: 20px;
+/* Sidebar Styles */
+.user-account-sidebar {
+    border-right: 1px solid #e9ecef;
+    padding: 30px 20px;
 }
 
-.user-account-content p {
-    color: #666;
-    line-height: 1.6;
+.user-account-sidebar nav {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
 }
 
-.user-account-form {
-    max-width: 800px;
-    margin: 0 auto;
-}
-
-.user-account-title {
-    font-size: var(--fontSizeXL);
-    font-weight: var(--fontWeightXL);
-    color: var(--primary-color);
-    margin-bottom: 30px;
-    text-align: center;
-    text-transform: uppercase;
+.sidebar-link {
+    display: flex;
+    align-items: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    color: #495057;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    font-weight: 600;
     position: relative;
 }
 
-.user-account-title::after {
-    content: '';
-    position: absolute;
-    bottom: -10px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 60px;
-    height: 3px;
-    background-color: var(--primary-color);
+.sidebar-link:hover {
+    background-color: #e9ecef;
+    color: var(--primary-color, #333);
+    transform: translateX(4px);
 }
 
-/* Responsive */
+.sidebar-link.active {
+    background-color: var(--primary-color, #333);
+    color: white;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+.sidebar-link.active::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: linear-gradient(to bottom, rgba(255,255,255,0.3), rgba(255,255,255,0.1));
+    border-radius: 0 2px 2px 0;
+}
+
+.sidebar-icon {
+    margin-right: 12px;
+    font-size: 1.2em;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Main Content Area */
+.user-account-main {
+    padding: 40px;
+    min-height: 500px;
+    background-color: #fff;
+    animation: fadeIn 0.3s ease;
+}
+
+.user-account-main h2 {
+    margin: 0 0 24px 0;
+    color: var(--primary-color, #333);
+    font-size: 28px;
+    font-weight: 600;
+    text-align: center;
+    border-bottom: 2px solid #f1f3f4;
+    padding-bottom: 16px;
+}
+.user-account-main p {
+    color: #6c757d;
+    line-height: 1.6;
+    font-size: 16px;
+    text-align: left;
+}
+.user-account-main .content-section {
+    margin-bottom: 30px;
+}
+.user-account-main .form-group {
+    margin-bottom: 20px;
+}
+.user-account-main label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 500;
+    color: #495057;
+}
+.user-account-main :is(input, select, textarea) {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+    font-size: 14px;
+    transition: border-color 0.3s ease;
+}
+.user-account-main :is(input, select, textarea):focus {
+    outline: none;
+    border-color: var(--primary-color, #333);
+    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.1);
+}
+.user-account-main button {
+    background: var(--primary-color, #333);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 6px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+.user-account-main button:hover {
+    background: var(--primary-color-dark, #222);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+/* Responsive Design */
 @media (max-width: 768px) {
-    .user-account-content {
+    .user-account-layout {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+    
+    .user-account-sidebar {
+        border-right: none;
+        border-bottom: 1px solid #e9ecef;
         padding: 20px;
     }
+    
+    .user-account-sidebar nav {
+        flex-direction: row;
+        overflow-x: auto;
+        gap: 8px;
+        padding-bottom: 8px;
+    }
+    
+    .sidebar-link {
+        white-space: nowrap;
+        min-width: max-content;
+        padding: 10px 16px;
+    }
+    
+    .sidebar-link:hover {
+        transform: none;
+    }
+    
+    .user-account-main {
+        padding: 20px;
+    }
+    
+    .user-account-main h2 {
+        font-size: 24px;
+    }
+}
 
-    .user-account-title {
-        font-size: var(--fontSize);
+@media (max-width: 480px) {
+    .user-account-container {
+        padding: 0 10px;
+    }
+    
+    .user-account-layout {
+        border-radius: 8px;
+    }
+    
+    .sidebar-link span:not(.sidebar-icon) {
+        display: none;
+    }
+    
+    .sidebar-icon {
+        margin-right: 0;
+    }
+    
+    .user-account-main {
+        padding: 15px;
     }
 }
 
@@ -75,7 +212,55 @@
     }
 }
 
-.user-account-content {
-    animation: fadeIn 0.3s ease;
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
 }
+
+.user-account-main {
+    animation: fadeIn 0.4s ease;
+}
+
+.sidebar-link {
+    animation: slideIn 0.3s ease;
+    animation-fill-mode: both;
+}
+
+.sidebar-link:nth-child(1) { animation-delay: 0.1s; }
+.sidebar-link:nth-child(2) { animation-delay: 0.15s; }
+.sidebar-link:nth-child(3) { animation-delay: 0.2s; }
+.sidebar-link:nth-child(4) { animation-delay: 0.25s; }
+.sidebar-link:nth-child(5) { animation-delay: 0.3s; }
+
+/* Loading State */
+.user-account-main.loading {
+    opacity: 0.7;
+    pointer-events: none;
+}
+
+.user-account-main.loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    margin: -10px 0 0 -10px;
+    border: 2px solid #f3f3f3;
+    border-top: 2px solid var(--primary-color, #333);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
 

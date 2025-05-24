@@ -40,8 +40,8 @@ function AppContent() {
         } />
         <Route path="/registration" element={<Registration />} />
         
-        {/* Static routes first */}
-        <Route path="/user-account" element={<UserAccount />} />
+        {/* User Account routes */}
+        <Route path="/user-account/*" element={<UserAccount />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/checkout" element={<Checkout />} />
         
