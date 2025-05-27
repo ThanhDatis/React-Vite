@@ -2,14 +2,9 @@ import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import Breadcrumb from '../Breadcrumb/Breadcrumb';
 import PersonalInfo from './PersonalInformation';
+import MyOrders from './MyOrders';
 import './UserAccount.css';
 
-const MyOrders = () => (
-    <div>
-        <h2>My Orders</h2>
-        <p>View your order history here.</p>
-    </div>
-);
 
 const Address = () => (
     <div>
