@@ -306,10 +306,9 @@
   gap: 20px;
 }
 
-.info-row {
+.info-row-checkout {
   display: flex;
-  gap: 30px;
-  
+  gap: 30px; 
 }
 
 .info-row.single {
@@ -320,13 +319,13 @@
   width: 100%;
 }
 
-.info-group {
+.info-group-checkout {
   flex: 1;
   display: flex;
   align-items: baseline;
 }
 
-.info-group label {
+.info-group-checkout label {
   display: block;
   color: #6b7280;
   font-size: var(--fontSizeXL);
@@ -334,7 +333,7 @@
   font-weight: var(--fontWeight);
 }
 
-.info-group p {
+.info-group-checkout p {
   margin: 0;
   font-weight: var(--fontWeight);
   color: #000;
@@ -350,15 +349,15 @@
     gap: 15px;
   }
   
-  .info-group {
+  .info-group-checkout {
     width: 100%;
   }
 
-  .info-group label {
+  .info-group-checkout label {
     font-size: 13px;
   }
 
-  .info-group p {
+  .info-group-checkout p {
     font-size: 15px;
   }
 }

@@ -4,14 +4,9 @@ import Breadcrumb from '../Breadcrumb/Breadcrumb';
 import PersonalInfo from './PersonalInformation';
 import MyOrders from './MyOrders';
 import PersonalAddress from './PersonalAddress';
+import PaymentMethod from './PaymentMethod/PaymentMethod';
 import './UserAccount.css';
 
-const PaymentMethod = () => (
-    <div>
-        <h2>Payment Method</h2>
-        <p>Manage your payment methods here.</p>
-    </div>
-);
 
 const Security = () => (
     <div>

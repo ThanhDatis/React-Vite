@@ -233,44 +233,44 @@ const CheckoutContent = () => {
                 <div className="shipping-summary">
                   <h3>Customer Information</h3>
                   <div className="info-summary">
-                    <div className="info-row">
-                      <div className="info-group">
+                    <div className="info-row-checkout">
+                      <div className="info-group-checkout">
                         <label>Họ và tên:&nbsp;</label>
                         <p>{shippingData.firstName} {shippingData.lastName}</p>
                       </div>
-                      <div className="info-group">
+                      <div className="info-group-checkout">
                         <label>Email:&nbsp;</label>
                         <p>{shippingData.email}</p>
                       </div>
                     </div>
                     
                     <div className="info-row single">
-                      <div className="info-group">
+                      <div className="info-group-checkout">
                         <label>Số điện thoại:&nbsp;</label>
                         <p>{shippingData.phone}</p>
                       </div>
                     </div>
                     
                     <div className="info-row single">
-                      <div className="info-group">
+                      <div className="info-group-checkout">
                         <label>Địa chỉ:&nbsp;</label>
                         <p>{shippingData.streetAddress}</p>
                       </div>
                     </div>
                     
-                    <div className="info-row">
-                      <div className="info-group">
+                    <div className="info-row-checkout">
+                      <div className="info-group-checkout">
                         <label>Phường/Xã:&nbsp;</label>
                         <p>{shippingData.ward}</p>
                       </div>
-                      <div className="info-group">
+                      <div className="info-group-checkout">
                         <label>Quận/Huyện:&nbsp;</label>
                         <p>{shippingData.district}</p>
                       </div>
                     </div>
                     
                     <div className="info-row single">
-                      <div className="info-group">
+                      <div className="info-group-checkout">
                         <label>Tỉnh/Thành phố:&nbsp;</label>
                         <p>{shippingData.city}</p>
                       </div>
@@ -278,7 +278,7 @@ const CheckoutContent = () => {
                     
                     {shippingData.description && (
                       <div className="info-row single">
-                        <div className="info-group">
+                        <div className="info-group-checkout">
                           <label>Ghi chú:&nbsp;</label>
                           <p>{shippingData.description}</p>
                         </div>
