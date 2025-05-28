@@ -1,1 +1,414 @@
- 
+/* PaymentMethod.css */
+
+.payment-method {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.payment-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #f0f0f0;
+}
+
+.payment-header h2 {
+    color: #333;
+    font-size: 24px;
+    font-weight: 600;
+    margin: 0;
+}
+
+.add-payment-btn {
+    background: #007bff;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.add-payment-btn:hover {
+    background: #0056b3;
+    transform: translateY(-1px);
+}
+
+/* Payment List */
+.payment-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.no-payment {
+    text-align: center;
+    padding: 60px 20px;
+    background: #f8f9fa;
+    border-radius: 12px;
+    color: #6c757d;
+}
+
+.payment-card {
+    background: white;
+    border: 1px solid #e9ecef;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.3s ease;
+}
+
+.payment-card:hover {
+    border-color: #007bff;
+    box-shadow: 0 4px 12px rgba(0,123,255,0.15);
+}
+
+.card-info {
+    flex: 1;
+}
+
+.card-visual {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 10px;
+}
+
+.card-icon {
+    font-size: 24px;
+    padding: 10px;
+    background: #f8f9fa;
+    border-radius: 8px;
+}
+
+.card-details {
+    flex: 1;
+}
+
+.card-number {
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+    font-family: 'Courier New', monospace;
+    margin-bottom: 4px;
+}
+
+.card-holder {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 4px;
+}
+
+.card-expiry {
+    font-size: 12px;
+    color: #999;
+}
+
+.card-labels {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.card-type {
+    background: #e9ecef;
+    color: #495057;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 500;
+    text-transform: uppercase;
+}
+
+.card-type.visa {
+    background: #1a1f71;
+    color: white;
+}
+
+.card-type.mastercard {
+    background: #eb001b;
+    color: white;
+}
+
+.card-type.amex {
+    background: #006fcf;
+    color: white;
+}
+
+.default-label {
+    background: #28a745;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.card-actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.set-default-btn, .edit-btn, .delete-btn {
+    padding: 8px 16px;
+    border: 1px solid;
+    border-radius: 6px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.set-default-btn {
+    background: white;
+    color: #28a745;
+    border-color: #28a745;
+}
+
+.set-default-btn:hover {
+    background: #28a745;
+    color: white;
+}
+
+.edit-btn {
+    background: white;
+    color: #ffc107;
+    border-color: #ffc107;
+}
+
+.edit-btn:hover {
+    background: #ffc107;
+    color: white;
+}
+
+.delete-btn {
+    background: white;
+    color: #dc3545;
+    border-color: #dc3545;
+}
+
+.delete-btn:hover {
+    background: #dc3545;
+    color: white;
+}
+
+/* Popup Styles */
+.popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.popup-content {
+    background: white;
+    border-radius: 12px;
+    padding: 0;
+    width: 90%;
+    max-width: 500px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+.popup-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 24px;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.popup-header h3 {
+    color: #333;
+    font-size: 20px;
+    font-weight: 600;
+    margin: 0;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #999;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+}
+
+.close-btn:hover {
+    background: #f8f9fa;
+    color: #333;
+}
+
+/* Form Styles */
+.payment-form {
+    padding: 24px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 6px;
+    color: #333;
+    font-weight: 500;
+    font-size: 14px;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 14px;
+    transition: border-color 0.3s ease;
+    box-sizing: border-box;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 2px rgba(0,123,255,0.25);
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 100px;
+    gap: 15px;
+}
+
+.detected-card-type {
+    display: block;
+    margin-top: 6px;
+    color: #28a745;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.checkbox-group {
+    margin: 24px 0;
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    font-size: 14px;
+    color: #333;
+}
+
+.checkbox-label input[type="checkbox"] {
+    width: auto;
+    margin: 0;
+    margin-right: 8px;
+}
+
+.checkmark {
+    margin-left: 4px;
+}
+
+/* Form Actions */
+.form-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+    padding-top: 20px;
+    border-top: 1px solid #e9ecef;
+}
+
+.cancel-btn, .save-btn {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.cancel-btn {
+    background: #f8f9fa;
+    color: #6c757d;
+    border: 1px solid #dee2e6;
+}
+
+.cancel-btn:hover {
+    background: #e9ecef;
+}
+
+.save-btn {
+    background: #007bff;
+    color: white;
+    min-width: 120px;
+}
+
+.save-btn:hover {
+    background: #0056b3;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .payment-method {
+        padding: 15px;
+    }
+    
+    .payment-header {
+        flex-direction: column;
+        gap: 15px;
+        align-items: stretch;
+    }
+    
+    .add-payment-btn {
+        width: 100%;
+        text-align: center;
+    }
+    
+    .payment-card {
+        flex-direction: column;
+        gap: 15px;
+        align-items: stretch;
+    }
+    
+    .card-actions {
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+    
+    .form-row {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .form-actions {
+        flex-direction: column;
+    }
+    
+    .cancel-btn, .save-btn {
+        width: 100%;
+    }
+} 
