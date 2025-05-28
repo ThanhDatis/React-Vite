@@ -3,15 +3,8 @@ import { Link, useLocation } from 'react-router-dom';
 import Breadcrumb from '../Breadcrumb/Breadcrumb';
 import PersonalInfo from './PersonalInformation';
 import MyOrders from './MyOrders';
+import PersonalAddress from './PersonalAddress';
 import './UserAccount.css';
-
-
-const Address = () => (
-    <div>
-        <h2>Address</h2>
-        <p>Manage your addresses here.</p>
-    </div>
-);
 
 const PaymentMethod = () => (
     <div>
@@ -111,7 +104,7 @@ export default function UserAccountContent() {
             case '/user-account/orders':
                 return <MyOrders />;
             case '/user-account/address':
-                return <Address />;
+                return <PersonalAddress />;
             case '/user-account/payment':
                 return <PaymentMethod />;
             case '/user-account/security':
