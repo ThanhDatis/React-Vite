@@ -1,55 +1,174 @@
 import { Link } from 'react-router-dom';
-import { useState } from 'react';
+import React, { useState } from 'react';
+import {
+    AppBar,
+    Toolbar,
+    Box,
+    Button,
+    Menu,
+    MenuItem,
+    Typography,
+    Chip
+} from '@mui/material';
+import { ExpandMore } from '@mui/icons-material';
 
 export default function HeaderNavBar () {
-    const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [anchorEl, setAnchorEl] = useState(null);
+    const isMenuOpen = Boolean(anchorEl);
 
-    const toggleMenu = () => {
-        setIsMenuOpen(!isMenuOpen);
+    const handleMenuOpen = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleMenuClose = () => {
+        setAnchorEl(null);
+    };
+
+    const brands = [
+        'Adidas',
+        'Apple',
+        'Bose',
+        'Canon',
+        'Dell',
+        'Dyson',
+    ];
+
+    const menuButtonsx = {
+        color: '#333333',
+        fontWeight: 'bold',
+        fontSize: '16px',
+        padding: '8px',
+        textTransform: 'uppercase',
+        '&:hover': {
+            backgroundColor: 'rgba(0, 0, 0, 0.04)'
+        },
     };
 
     return (
-        <div className="headerNavbar">
-            <div className="headerNavbarMenu">
-                <ul className="headerNavbarMenuList">
-                    <div className="menuList-items-container">
-                        <li className="menuList-item">ALL BRANDS
-                            <svg className="menuList-itemSvg" width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <g clipPath="url(#clip0_2_21285)">
-                                    <path d="M24 0H0V24H24V0Z" fill="white" fillOpacity="0.01"/>
-                                    <path d="M18.5 9L12.5 15L6.5 9" stroke="black" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
-                                </g>
-                                <defs>
-                                    <clipPath id="clip0_2_21285">
-                                        <rect width="24" height="24" fill="none"/>
-                                    </clipPath>
-                                </defs>
-                            </svg>
-                        </li>
-                        <li className="menuList-item">
-                            <Link to="/skincare">SKINCARE</Link>
-                        </li>
-                        <li className="menuList-item">
-                            <Link to="/makeup">MAKE UP</Link>
-                        </li>
-                        <li className="menuList-item">
-                            <Link to="/haircare">HAIR CARE</Link>
-                        </li>
-                        <li className="menuList-item">
-                            <Link to="/bath-body">BATH & BODY</Link>
-                        </li>
-                        <li className="menuList-item">
-                            <Link to="/fragrance">BEAUTY SUPPLEMENTS</Link>
-                        </li>
-                        <li className="menuList-item">PROMOS</li>
-                    </div>
-                    <div className="headerNavbarSell">
-                        <div className="headerNavSell-title">
-                            <span>SELL WITH US</span>
-                        </div>
-                    </div>
-                </ul>
-            </div>
-        </div>
-    )
-} 
+        <AppBar 
+            position="static"
+            sx={{
+                backgroundColor: 'white',
+                boxShadow: 'none',
+                borderBox: '1px solid #e0e0e0',
+                paddingRight: '70px',
+                paddingLeft: '70px',
+            }}
+        >
+            <Toolbar 
+            sx={{ 
+                justifyContent: 'space-between',
+                padding: 0,
+                minHeight: '40px !important'
+            }}>
+                {/* Menu chinh */}
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                    {/* ALL BRANDS voi dropdown */}
+                    <Box>
+                        <Button
+                        onClick={handleMenuOpen}
+                        endIcon={<ExpandMore />}
+                        sx={menuButtonsx}
+                        >
+                        ALL BRANDS
+                        </Button>
+                        <Menu
+                        anchorEl={anchorEl}
+                        open={isMenuOpen}
+                        onClose={handleMenuClose}
+                        MenuListProps={{
+                            'aria-labelledby': 'brands-button',
+                        }}
+                        PaperProps={{
+                            sx: {
+                                mt: 1,
+                                width: 200,
+                                boxShadow: '0 4px 20px rgba(0, 0, 0, 0.1)'
+                            }
+                        }}
+                        >
+                            {brands.map((brand) => (
+                                <MenuItem 
+                                key={brand} 
+                                onClick={handleMenuClose}
+                                sx={{
+                                    '&:hover': {
+                                        backgroundColor: 'rgba(0, 0, 0, 0.04)'
+                                    }
+                                }}
+                                >
+                                    <Typography variant="body2">
+                                        {brand}
+                                    </Typography>
+                                </MenuItem>
+                            ))}
+                        </Menu>
+                    </Box>
+                    {/* Cac menu items khac */}
+                    <Button
+                    component={Link}
+                    to="/skincare"
+                        sx={menuButtonsx}
+                    >
+                        SKINCARE
+                    </Button>
+                    <Button
+                    component={Link}
+                    to="/makeup"
+                    sx={menuButtonsx}
+                    >
+                        MAKE UP
+                    </Button>
+
+                    <Button
+                    component={Link}
+                    to="/haircare"
+                    sx={menuButtonsx}
+                    >
+                        haircare
+                    </Button>
+
+                    <Button
+                    component={Link}
+                    to="/bath-body"
+                    sx={menuButtonsx}
+                    >
+                        bath & body
+                    </Button>
+
+                    <Button
+                    component={Link}
+                    to="/fragrance"
+                    sx={menuButtonsx}
+                    >
+                        beauty supplements
+                    </Button>
+
+                    <Button
+                    component={Link}
+                    to="/promos"
+                    sx={menuButtonsx}
+                    >   
+                        promos
+                    </Button>
+                </Box>
+                {/* Sell with us */}
+                <Box>
+                    <Chip
+                    label="SELL WITH US"
+                    sx={{
+                        backgroundColor: '#333333',
+                        color: 'white',
+                        fontWeight: 'bold',
+                        fontSize: '12px',
+                        '&:hover': {
+                            backgroundColor: '#555555'
+                        }
+                    }}
+                    />
+                </Box>
+            </Toolbar>
+        </AppBar>
+        
+    );
+}
