@@ -31,6 +31,12 @@ const CheckoutContent = () => {
   const { cartItems, getCartTotal } = useCart();
   const [activeStep, setActiveStep] = useState(0);
   const [promoCode, setPromoCode] = useState('');
+  const [errors, setErrors] = useState({
+    cardholderName: '',
+    cardNumber: '',
+    expiryDate: '',
+    cvv: ''
+  });
   
   // Shipping form data
   const [shippingData, setShippingData] = useState({
@@ -71,8 +77,23 @@ const CheckoutContent = () => {
 
     let formattedValue = value;
 
+    if (name === 'cardholderName') {
+      formattedValue = value.toUpperCase().trim();
+      
+      const isValid = /^[A-Z\s]+$/.test(formattedValue);
+
+      setErrors((prev) => ({
+        ...prev,
+        cardholderName: isValid ? '' : 'Invalid name'
+      }));
+    }
+
     if (name === 'cardNumber') {
       formattedValue = formCardNumber(value);
+    }
+
+    if (name === 'expiryDate') {
+      formattedValue = formatExpiryDate(value);
     }
 
     setPaymentData((prev) => ({
@@ -300,6 +321,15 @@ const CheckoutContent = () => {
     }
     return sum % 10 === 0;
   }
+
+  const formatExpiryDate = (value) => {
+    const cleanedValue = value.replace(/\D/g, '');
+
+    if (cleanedValue.length === 0) return '';
+    if (cleanedValue.length <= 2) return cleanedValue;
+
+    return `${cleanedValue.slice(0, 2)}/${cleanedValue.slice(2, 6)}`;
+  }
   
   const BillingInfo = ({ label, value }) => (
     <Box 
@@ -477,7 +507,24 @@ const CheckoutContent = () => {
 
       {/* Credit Card Details */}
       {paymentData.paymentMethod === 'credit' && (
-        <Paper elevation={0} sx={{ p: 3, mb: 1, backgroundColor: '#f9fafb', borderRadius: 2 }}>
+        <Paper 
+        elevation={0} 
+        sx={{ 
+          p: 3, 
+          backgroundColor: '#f9fafb', 
+          borderRadius: 2,
+          animation: 'fadeIn 0.3s ease-in-out',
+          '&:hover': {
+            from: {
+              opacity: 0,
+              transform: 'translateY(-10px)'
+            },
+            to: {
+              opacity: 1,
+              transform: 'translateY(0)'
+            }
+          }
+        }}>
           <Typography variant="h6" sx={{ mb: 2, fontWeight: 'bold' }}>
             Credit Card Details
           </Typography>
@@ -492,8 +539,11 @@ const CheckoutContent = () => {
                 onChange={handlePaymentInputChange}
                 required
                 variant="outlined"
+                placeholder="Enter name as shown on card"
                 sx={{
-                  width: '300px'
+                  '& .MuiOutlinedInput-root': {
+                    backgroundColor: '#fff',
+                  }
                 }}
               />
             </Grid>
@@ -503,11 +553,26 @@ const CheckoutContent = () => {
                 fullWidth
                 label="Card Number"
                 name="cardNumber"
-                placeholder="XXXX XXXX XXXX XXXX"
+                placeholder="1234 1234 1234 1234"
                 value={paymentData.cardNumber}
                 onChange={handlePaymentInputChange}
                 required
                 variant="outlined"
+                inputProps={{
+                  maxLength: 19,
+                }}
+                sx={{
+                  '& .MuiOutlinedInput-root': {
+                    backgroundColor: '#fff',
+                  }
+                }}
+                InputProps={{
+                  startAdornment: (
+                    <Box sx={{ mr: 1, display: 'flex', alignItems: 'center' }}>
+                      <CreditCard sx={{ color: '#666', fontSize: 22 }}/>
+                    </Box>
+                  )
+                }}
               />
             </Grid>
             
@@ -520,6 +585,12 @@ const CheckoutContent = () => {
                 onChange={handlePaymentInputChange}
                 required
                 variant="outlined"
+                placeholder="Enter branch name"
+                sx={{
+                  '& .MuiOutlinedInput-root': {
+                    backgroundColor: '#fff',
+                  }
+                }}
               />
             </Grid>
             
@@ -533,6 +604,14 @@ const CheckoutContent = () => {
                 onChange={handlePaymentInputChange}
                 required
                 variant="outlined"
+                inputProps={{
+                  maxLength: 7,
+                }}
+                sx={{
+                  '& .MuiOutlinedInput-root': {
+                    backgroundColor: '#fff',
+                  }
+                }}
               />
             </Grid>
             
@@ -547,6 +626,15 @@ const CheckoutContent = () => {
                 onChange={handlePaymentInputChange}
                 required
                 variant="outlined"
+                inputProps={{
+                  maxLength: 3,
+                }}
+                sx={{
+                  '& .MuiOutlinedInput-root': {
+                    backgroundColor: '#fff',
+                  }
+                }}
+                helperText="3-4 digits on back of card"
               />
             </Grid>
           </Grid>
@@ -554,7 +642,25 @@ const CheckoutContent = () => {
       )}
       
       {/* Terms and Conditions */}
-      <Box sx={{ mb: 3 }}>
+      <Box sx={{ 
+          mt: 1, 
+          p: 1,
+          backgroundColor: '#e8f5e8',
+          borderRadius: 1,
+          border: '1px solid #C3e6c3'
+        }}
+      >
+        {/* <Typography 
+        variant="caption" 
+        sx={{ 
+          display: 'flex', 
+          alignItems: 'center', 
+          color: '#2e7d32',
+          fontSize: '0.875rem'
+        }}
+      >
+        🔒 Your payment information is encrypted and secure
+      </Typography> */}
         <FormControlLabel
           control={
             <Checkbox

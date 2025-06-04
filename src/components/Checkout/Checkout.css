@@ -1,4 +1,4 @@
-.checkout-container {
+/* .checkout-container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 40px;
@@ -11,7 +11,6 @@
   text-align: center;
 }
 
-/* Checkout Steps */
 .checkout-steps {
   margin-bottom: 20px;
 }
@@ -43,7 +42,6 @@
   flex-grow: 1;
   height: 3px;
   background-color: #CAE5E8;
-  /* margin: 0 1rem; */
   max-width: 200px;
 }
 
@@ -64,7 +62,6 @@
   font-weight: var(--fontWeightXL);
 }
 
-/* Checkout Content Layout */
 .checkout-content {
   display: grid;
   grid-template-columns: 3fr 2fr;
@@ -77,7 +74,6 @@
   }
 }
 
-/* Form Styles */
 .section-title {
   font-size: var(--fontSizeXXL);
   font-weight: var(--fontWeightXL);
@@ -150,7 +146,6 @@
   background-color: #e5e7eb;
 }
 
-/* Order Summary Styles */
 .order-summary {
   align-self: flex-start;
 }
@@ -175,7 +170,6 @@
 }
 
 .summary-row.total {
-  /* border-top: 1px solid #e5e7eb; */
   font-weight: var(--fontWeightXL);
   font-size: var(--fontSizeXXL);
 }
@@ -207,7 +201,6 @@
   background-color: #111827;
 }
 
-/* Order Items List */
 .summary-items {
   margin-top: 20px;
 }
@@ -257,7 +250,6 @@
   height: 15px;
   background-color: #000;
   color: #fff;
-  /* border-radius: 50%; */
   font-size: 12px;
   display: flex;
   align-items: center;
@@ -284,7 +276,6 @@
   font-weight: var(--fontWeightXL);
 }
 
-/* Shipping Summary */
 .shipping-summary {
   margin-bottom: 30px;
   background-color: #f9fafb;
@@ -362,10 +353,9 @@
   }
 }
 
-/* Payment Methods */
-/* .payment-methods {
+.payment-methods {
   margin-bottom: 30px;
-} */
+}
 
 .payment-methods h3 {
   font-size: var(--fontSizeXL);
@@ -414,7 +404,6 @@
   font-size: var(--fontSizeXXL);
 }
 
-/* Credit Card Details */
 .credit-card-details {
   background-color: #f9fafb;
   padding: 20px;
@@ -427,7 +416,6 @@
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* Terms and Conditions */
 .terms-and-conditions {
   margin-bottom: 30px;
 }
@@ -452,8 +440,7 @@
   text-decoration: underline;
 }
 
-/* Disable button when terms not agreed */
 .btn-place-order:disabled {
   background-color: #d1d5db;
   cursor: not-allowed;
-} 
+}  */
