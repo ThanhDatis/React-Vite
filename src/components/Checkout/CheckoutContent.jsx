@@ -68,18 +68,44 @@ const CheckoutContent = () => {
 
   const handlePaymentInputChange = (e) => {
     const { name, value, type, checked } = e.target;
-    setPaymentData({
-      ...paymentData,
-      [name]: type === 'checkbox' ? checked : value
-    });
+
+    let formattedValue = value;
+
+    if (name === 'cardNumber') {
+      formattedValue = formCardNumber(value);
+    }
+
+    setPaymentData((prev) => ({
+      ...prev,
+      [name]: type === 'checkbox' ? checked : formattedValue
+    }));
+
+    if (name === 'cardNumber') {
+      const cleanedValue = formattedValue.replace(/\D/g, '');
+      const isValid = isValidCardNumber(cleanedValue);
+      
+      setErrors((prev) => ({
+        ...prev,
+        cardNumber: 
+        cleanedValue.length < 16
+        ? 'Card number must be 16 digits'
+        : isValid
+        ? ''
+        : 'Invalid card number'
+      }));
+    }
   };
 
   const handleNext = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
+    if (activeStep < steps.length - 1) {
+      setActiveStep((prevActiveStep) => prevActiveStep + 1);
+    }
   };
 
   const handleBack = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep - 1);
+    if (activeStep > 0) {
+      setActiveStep((prevActiveStep) => prevActiveStep - 1);
+    }
   };
 
   const handlePlaceOrder = () => {
@@ -102,14 +128,14 @@ const CheckoutContent = () => {
   ];
 
   const ShippingField = [
-    { label: 'First Name', name: 'firstName', type: 'text'},
-    { label: 'Last Name', name: 'lastName', type: 'text'},
-    { label: 'Email', name: 'email', type: 'email'},
-    { label: 'Phone Number', name: 'phone', type: 'tel'},
-    { label: 'Street Address', name: 'streetAddress', placeholder: 'House number and street name'},
-    { label: 'Ward', name: 'ward'},
-    { label: 'District', name: 'district'},
-    { label: 'City/Province', name: 'city'},
+    { label: 'First Name', name: 'firstName', type: 'text', id: 'firstName' },
+    { label: 'Last Name', name: 'lastName', type: 'text', id: 'lastName' },
+    { label: 'Email', name: 'email', type: 'email', id: 'email' },
+    { label: 'Phone Number', name: 'phone', type: 'tel', id: 'phone' },
+    { label: 'Street Address', name: 'streetAddress', type: 'text', id: 'streetAddress', placeholder: 'House number and street name' },
+    { label: 'Ward', name: 'ward', type: 'text', id: 'ward' },
+    { label: 'District', name: 'district', type: 'text', id: 'district' },
+    { label: 'City/Province', name: 'city', type: 'text', id: 'city' },
   ];
 
   const ShippingTextField = ({ 
@@ -120,7 +146,7 @@ const CheckoutContent = () => {
     onChange, 
     multiline = false, 
     placeholder,
-    type
+    type = 'text'
   }) => (
     <TextField
       fullWidth
@@ -139,12 +165,21 @@ const CheckoutContent = () => {
         width: multiline ? '665px' : '320px',
         '& .MuiOutlinedInput-root': {
           bgcolor: '#fff'
-        }
+        },  
+        // '& .MuiFormLabel-asterisk': {
+        //   display: 'inline',
+        //   lineHeight: 1,
+        //   marginLeft: '2px',
+        //   color: 'red'
+        // }
       }}
+      key={name}
     />
   );
-
-  const renderShippingForm = () => (
+  
+  
+  const renderShippingForm = () => {
+    return (
     <Card elevation={0} sx={{ bgcolor: 'transparent' }}>
       <Typography 
         variant="h6" 
@@ -163,9 +198,14 @@ const CheckoutContent = () => {
         {ShippingField.map((field) => (
           <Grid item xs={12} sm={6} key={field.name}>
             <ShippingTextField
-              {...field}
+              label={field.label}
+              name={field.name}
+              type={field.type}
               value={shippingData[field.name]}
               onChange={handleShippingInputChange}
+              placeholder={field.placeholder}
+              multiline={field.multiline}
+              rows={field.rows}
             />
           </Grid>
         ))}
@@ -203,29 +243,64 @@ const CheckoutContent = () => {
         </Button>
       </Box>
     </Card>
-  );
+    )
+};
 
   const BillingField = [
     [
-      { label: 'Họ và tên', value: (data) => `${data.firstName} ${data.lastName}`.trim() || 'Trống' },
-      { label: 'Email', value: (data) => data.email || 'Trống' }
+      { id: 'fullName', label: 'Họ và tên', value: (data) => `${data.firstName} ${data.lastName}`.trim() || 'Trống' },
+      { id: 'customerEmail', label: 'Email', value: (data) => data.email || 'Trống' }
     ],
     [
-      { label: 'Số điện thoại', value: (data) => data.phone || 'Trống' }
+      { id: 'customerPhone', label: 'Số điện thoại', value: (data) => data.phone || 'Trống' }
     ],
     [
-      { label: 'Đường số', value: (data) => data.streetAddress || 'Trống' },
-      { label: 'Phường/Xã', value: (data) => data.ward || 'Trống' }
+      { id: 'street', label: 'Đường số', value: (data) => data.streetAddress || 'Trống' },
+      { id: 'wardArea', label: 'Phường/Xã', value: (data) => data.ward || 'Trống' }
     ],
     [
-      { label: 'Quận/Huyện', value: (data) => data.district || 'Trống' },
-      { label: 'Tỉnh/Thành phố', value: (data) => data.city || 'Trống' }
+      { id: 'districtArea', label: 'Quận/Huyện', value: (data) => data.district || 'Trống' },
+      { id: 'cityProvince', label: 'Tỉnh/Thành phố', value: (data) => data.city || 'Trống' }
     ],
     [
-      { label: 'Ghi chú', value: (data) => data.description || 'Trống' }
+      { id: 'notes', label: 'Ghi chú', value: (data) => data.description || 'Trống' }
     ]
   ];
 
+  const formCardNumber = (value) => {
+    return value
+    .replace(/\D/g, '')
+    .slice(0, 16)
+    .replace(/(\d{4})(?=\d)/g, '$1 ')
+    .trim();
+  }
+
+  const isValidCardNumber = (value) => {
+    const cleanedValue = value.replace(/\D/g, '');
+
+    if (cleanedValue.length < 4 || cleanedValue.length > 16) {
+      return false;
+    }
+
+    let sum = 0;
+    let shouldDouble = false;
+
+    for (let i = cleanedValue.length - 1; i >= 0; i--) {
+      let digit = parseInt(cleanedValue[i], 10);
+
+      if (shouldDouble) {
+        digit *= 2;
+        if (digit > 9) {
+          digit -= 9;
+        }
+      }
+
+      sum += digit;
+      shouldDouble = !shouldDouble;
+    }
+    return sum % 10 === 0;
+  }
+  
   const BillingInfo = ({ label, value }) => (
     <Box 
       sx={{
@@ -307,9 +382,9 @@ const CheckoutContent = () => {
                 width: '100%',
               }}
             >
-              {row.map((field, fieldIndex) => (
+              {row.map((field) => (
                 <BillingInfo
-                  key={fieldIndex}
+                  key={field.id}
                   label={field.label}
                   value={field.value(shippingData)}
                 />
@@ -320,7 +395,7 @@ const CheckoutContent = () => {
       </Paper>
 
       {/* Payment Methods */}
-      <Box sx={{ mb: 3 }}>
+      <Box sx={{ mb: 0 }}>
         <Typography variant="h6" sx={{ mb: 2, fontWeight: 'bold' }}>
           Payment Method
         </Typography>
@@ -336,7 +411,7 @@ const CheckoutContent = () => {
                 borderRadius: 2,
                 cursor: 'pointer',
                 flex: 1,
-                minWidth: '200px',
+                minWidth: '325.5px',
                 '&:hover': { borderColor: '#CAE5E8' }
               }}
             >
@@ -355,7 +430,10 @@ const CheckoutContent = () => {
                     Cash on Delivery
                   </Box>
                 }
-                sx={{ width: '100%' }}
+                sx={{ 
+                  width: '100%',
+                  margin: 0
+                 }}
               />
             </Paper>
             
@@ -368,7 +446,7 @@ const CheckoutContent = () => {
                 borderRadius: 2,
                 cursor: 'pointer',
                 flex: 1,
-                minWidth: '200px',
+                minWidth: '325.5px',
                 '&:hover': { borderColor: '#CAE5E8' }
               }}
             >
@@ -387,16 +465,19 @@ const CheckoutContent = () => {
                     Credit Card
                   </Box>
                 }
-                sx={{ width: '100%' }}
+                sx={{ 
+                  width: '100%',
+                  margin: 0,
+                 }}
               />
             </Paper>
           </Box>
         </FormControl>
       </Box>
-      
+
       {/* Credit Card Details */}
       {paymentData.paymentMethod === 'credit' && (
-        <Paper elevation={0} sx={{ p: 3, mb: 3, backgroundColor: '#f9fafb', borderRadius: 2 }}>
+        <Paper elevation={0} sx={{ p: 3, mb: 1, backgroundColor: '#f9fafb', borderRadius: 2 }}>
           <Typography variant="h6" sx={{ mb: 2, fontWeight: 'bold' }}>
             Credit Card Details
           </Typography>
@@ -411,6 +492,9 @@ const CheckoutContent = () => {
                 onChange={handlePaymentInputChange}
                 required
                 variant="outlined"
+                sx={{
+                  width: '300px'
+                }}
               />
             </Grid>
             
@@ -457,6 +541,7 @@ const CheckoutContent = () => {
                 fullWidth
                 label="CVV"
                 name="cvv"
+                type="password"
                 placeholder="XXX"
                 value={paymentData.cvv}
                 onChange={handlePaymentInputChange}
@@ -476,17 +561,35 @@ const CheckoutContent = () => {
               name="agreeToTerms"
               checked={paymentData.agreeToTerms}
               onChange={handlePaymentInputChange}
-              required
+              required={false}
             />
           }
           label={
-            <Typography variant="body2">
-              I agree to the{' '}
-              <MuiLink href="#" underline="hover">
-                Terms and Conditions
-              </MuiLink>
-            </Typography>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+              <Typography variant="body2">
+                I agree to the{' '}
+                <MuiLink href="#" underline="hover">
+                  Terms and Conditions
+                </MuiLink>
+              </Typography>
+              <Typography 
+                variant="body2" 
+                component="span"
+                sx={{ 
+                  color: 'error.main',
+                  lineHeight: 1,
+                  ml: 0.5
+                }}
+              >
+                *
+              </Typography>
+            </Box>
           }
+          sx={{
+            '& .MuiFormControlLabel-asterisk': {
+              display: 'none'
+            }
+          }}
         />
       </Box>
       
@@ -641,6 +744,61 @@ const CheckoutContent = () => {
     </Card>
   );
 
+  // Stepper component
+  const Stepper = () => (
+    <Box sx={{ mb: 4 }}>
+      {/* Step indicators */}
+      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 2, mb: 1 }}>
+        {steps.map((_, index) => (
+          <React.Fragment key={index}>
+            <Box 
+              sx={{ 
+                width: 40, 
+                height: 40, 
+                borderRadius: '50%', 
+                bgcolor: index <= activeStep ? '#000' : '#CAE5E8',
+                color: index <= activeStep ? '#fff' : '#000',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontWeight: 500,
+                transition: 'all 0.3s ease'
+              }}
+            >
+              {index + 1}
+            </Box>
+            {index < steps.length - 1 && (
+              <Box 
+                sx={{ 
+                  width: 200,
+                  height: 2,
+                  bgcolor: index < activeStep ? '#000' : '#CAE5E8',
+                  transition: 'background-color 0.3s ease'
+                }} 
+              />
+            )}
+          </React.Fragment>
+        ))}
+      </Box>
+
+      {/* Step labels */}
+      <Box sx={{ display: 'flex', justifyContent: 'center', gap: 20 }}>
+        {steps.map((label, index) => (
+          <Typography 
+            key={index}
+            sx={{ 
+              fontWeight: 500,
+              color: index <= activeStep ? '#000' : '#6B7280',
+              transition: 'color 0.3s ease'
+            }}
+          >
+            {label}
+          </Typography>
+        ))}
+      </Box>
+    </Box>
+  );
+
   return (
     <>
       <Breadcrumb items={breadcrumbItems} />
@@ -664,68 +822,8 @@ const CheckoutContent = () => {
         >
           CHECKOUT
         </Typography>
+        <Stepper />
         
-        {/* Stepper */}
-        <Box sx={{ mb: 4 }}>
-          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 2, mb: 1 }}>
-            <Box 
-              sx={{ 
-                width: 40, 
-                height: 40, 
-                borderRadius: '50%', 
-                bgcolor: '#000',
-                color: '#fff',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                fontWeight: 500
-              }}
-            >
-              1
-            </Box>
-            <Box 
-              sx={{ 
-                width: 200,
-                height: 2,
-                bgcolor: '#CAE5E8'
-              }} 
-            />
-            <Box 
-              sx={{ 
-                width: 40, 
-                height: 40, 
-                borderRadius: '50%', 
-                bgcolor: '#CAE5E8',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                fontWeight: 500
-              }}
-            >
-              2
-            </Box>
-          </Box>
-          <Box sx={{ display: 'flex', justifyContent: 'center', gap: 20 }}>
-            <Typography 
-              sx={{ 
-                fontWeight: 500,
-                color: '#000'
-              }}
-            >
-              Shipping Details
-            </Typography>
-            <Typography 
-              sx={{ 
-                fontWeight: 500,
-                color: '#6B7280'
-              }}
-            >
-              Billing Details
-            </Typography>
-          </Box>
-        </Box>
-        
-        {/* Main Content - Two Columns */}
         <Box 
           sx={{ 
             display: 'grid',
@@ -733,13 +831,10 @@ const CheckoutContent = () => {
             gap: { xs: 3, md: 5 }
           }}
         >
-          {/* Left Column - Forms */}
           <Box>
             {activeStep === 0 && renderShippingForm()}
             {activeStep === 1 && renderBillingForm()}
-          </Box>
-          
-          {/* Right Column - Summary */}
+          </Box>          
           <Box>
             {renderOrderSummary()}
           </Box>
