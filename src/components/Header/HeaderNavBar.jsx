@@ -50,7 +50,7 @@ export default function HeaderNavBar () {
             sx={{
                 backgroundColor: 'white',
                 boxShadow: 'none',
-                borderBox: '1px solid #e0e0e0',
+                borderBottom: '2px solid #D7D7D7',
                 paddingRight: '70px',
                 paddingLeft: '70px',
             }}

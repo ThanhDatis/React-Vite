@@ -126,7 +126,7 @@ const CheckoutContent = () => {
       fullWidth
       label={label}
       name={name}
-      value={value || ''}
+      value={value}
       onChange={onChange}
       variant="outlined"
       size="small"
@@ -207,41 +207,51 @@ const CheckoutContent = () => {
 
   const BillingField = [
     [
-      { label: 'Họ và tên', value: (data) => `${data.firstName} ${data.lastName}` },
-      { label: 'Email', value: (data) => data.email }
+      { label: 'Họ và tên', value: (data) => `${data.firstName} ${data.lastName}`.trim() || 'Trống' },
+      { label: 'Email', value: (data) => data.email || 'Trống' }
     ],
     [
-      { label: 'Số điện thoại', value: (data) => data.phone }
+      { label: 'Số điện thoại', value: (data) => data.phone || 'Trống' }
     ],
     [
-      { label: 'Đường số', value: (data) => data.streetAddress },
-      { label: 'Phường/Xã', value: (data) => data.ward }
+      { label: 'Đường số', value: (data) => data.streetAddress || 'Trống' },
+      { label: 'Phường/Xã', value: (data) => data.ward || 'Trống' }
     ],
     [
-      { label: 'Quận/Huyện', value: (data) => data.district },
-      { label: 'Tỉnh/Thành phố', value: (data) => data.city }
+      { label: 'Quận/Huyện', value: (data) => data.district || 'Trống' },
+      { label: 'Tỉnh/Thành phố', value: (data) => data.city || 'Trống' }
+    ],
+    [
+      { label: 'Ghi chú', value: (data) => data.description || 'Trống' }
     ]
   ];
 
   const BillingInfo = ({ label, value }) => (
-    <Box sx={{ mb: 2 }}>
+    <Box 
+      sx={{
+        display: 'flex',
+        alignItems: 'center',
+        flex: 1,
+      }}
+    >
       <Typography 
         variant="body2" 
-        sx={{ 
-          mb: 1, 
+        sx={{
+          
           color: '#6B7280',
-          fontSize: '14px',
-          fontWeight: 500
+          fontSize: '16px',
+          flexShrink: 0,          
         }}
       >
         {label}
+        <span style={{ marginRight: '10px' }}>:</span>
       </Typography>
       <Typography 
         variant="body1" 
         sx={{ 
           color: '#000',
-          fontSize: '15px',
-          fontWeight: 500
+          fontSize: '16px',
+          flex: 1,
         }}
       >
         {value}
@@ -277,7 +287,7 @@ const CheckoutContent = () => {
         <Typography 
           variant="h6" 
           sx={{ 
-            pb: 2,
+            pb: 1,
             mb: 3,
             fontWeight: 600,
             fontSize: '18px',
@@ -287,27 +297,26 @@ const CheckoutContent = () => {
           Customer Information
         </Typography>
 
-        <Grid container spacing={3}>
+        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
           {BillingField.map((row, rowIndex) => (
-            <Grid item xs={12} key={rowIndex}>
-              <Grid container spacing={3}>
-                {row.map((field, fieldIndex) => (
-                  <Grid 
-                    item 
-                    xs={12} 
-                    sm={row.length > 1 ? 6 : 12} 
-                    key={fieldIndex}
-                  >
-                    <BillingInfo
-                      label={field.label}
-                      value={field.value(shippingData)}
-                    />
-                  </Grid>
-                ))}
-              </Grid>
-            </Grid>
+            <Box 
+              key={rowIndex}
+              sx={{ 
+                display: 'flex',
+                gap: 1,
+                width: '100%',
+              }}
+            >
+              {row.map((field, fieldIndex) => (
+                <BillingInfo
+                  key={fieldIndex}
+                  label={field.label}
+                  value={field.value(shippingData)}
+                />
+              ))}
+            </Box>
           ))}
-        </Grid>
+        </Box>
       </Paper>
 
       {/* Payment Methods */}

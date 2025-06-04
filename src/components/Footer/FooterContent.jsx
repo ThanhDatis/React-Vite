@@ -138,7 +138,7 @@ export default function FooterContent() {
   );
 
   return (
-    <Box component="footer" sx={{ backgroundColor: '#f8f9fa', pt: 6, pb: 2 }}>
+    <Box component="footer" sx={{ backgroundColor: '#E8E8E8', pt: 6, pb: 2 }}>
       <Container maxWidth="lg" 
       sx={{
         px: 2,
