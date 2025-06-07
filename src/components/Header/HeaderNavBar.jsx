@@ -39,9 +39,37 @@ export default function HeaderNavBar () {
         fontSize: '16px',
         padding: '8px',
         textTransform: 'uppercase',
+        position: 'relative',
+        overflow: 'hidden',
         '&:hover': {
             backgroundColor: 'rgba(0, 0, 0, 0.04)'
         },
+        '&::after': {
+            content: '""',
+            position: 'absolute',
+            bottom: 0,
+            left: '50%',
+            width: 0,
+            height: '2px',
+            backgroundColor: '#333333',
+            transform: 'translateX(-50%)',
+            transformOrigin: 'center',
+            transition: 'width 0.3s ease-in-out',
+        },  
+        '&:hover::after': {
+            width: '80%',
+        }
+    };
+
+    const allBrandsButtonSx = {
+        color: '#333333',
+        fontSize: '16px',
+        fontWeight: 'bold',
+        padding: '8px',
+        textTransform: 'uppercase',
+        '&:hover': {
+            backgroundColor: 'rgba(0, 0, 0, 0.04)'
+        },        
     };
 
     return (
@@ -68,7 +96,7 @@ export default function HeaderNavBar () {
                         <Button
                         onClick={handleMenuOpen}
                         endIcon={<ExpandMore />}
-                        sx={menuButtonsx}
+                        sx={allBrandsButtonSx}
                         >
                         ALL BRANDS
                         </Button>
