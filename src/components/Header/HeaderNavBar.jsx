@@ -95,7 +95,12 @@ export default function HeaderNavBar () {
                     <Box>
                         <Button
                         onClick={handleMenuOpen}
-                        endIcon={<ExpandMore />}
+                        endIcon={<ExpandMore 
+                            sx={{
+                                transition: 'transform 0.3s ease',
+                                transform: isMenuOpen ? 'rotate(180deg)' : 'rotate(0deg)'
+                            }}
+                        />}
                         sx={allBrandsButtonSx}
                         >
                         ALL BRANDS
@@ -120,8 +125,10 @@ export default function HeaderNavBar () {
                                 key={brand} 
                                 onClick={handleMenuClose}
                                 sx={{
+                                    transition: 'all 0.3s ease',
                                     '&:hover': {
-                                        backgroundColor: 'rgba(0, 0, 0, 0.04)'
+                                        backgroundColor: 'rgba(0, 0, 0, 0.04)',
+                                        transform: 'translateX(4px)',
                                     }
                                 }}
                                 >
