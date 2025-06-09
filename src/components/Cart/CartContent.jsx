@@ -1,9 +1,23 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { FaMinus, FaPlus } from 'react-icons/fa';
+import {
+  Box,
+  Typography,
+  Button,
+  TextField,
+  Card,
+  CardContent,
+  Grid,
+  IconButton,
+  Paper,
+  Divider,
+  Container,
+  Stack
+} from '@mui/material';
+import { Remove, Add, Delete } from '@mui/icons-material';
 import Breadcrumb from '../Breadcrumb/Breadcrumb';
 import { useCart } from '../../context/CartContext';
-import './Cart.css';
+
 
 const CartContent = () => {
   const { cartItems, removeFromCart, updateQuantity, getCartTotal } = useCart();
@@ -21,107 +35,214 @@ const CartContent = () => {
   return (
     <>
       <Breadcrumb items={breadcrumbItems} />
-      <div className="cart-container">
-        <h1 className="cart-title">CART</h1>
+      <Container maxWidth="lg" sx={{ py: 2 }}>
+        <Typography variant="h3" component="h1" 
+          sx={{ mb: 2, fontWeight: 'bold', textAlign: 'center', letterSpacing: 2, fontSize: '30px'}}
+        >
+          CART
+        </Typography>
         
         {cartItems.length === 0 ? (
-          <div className="cart-empty">
-            <h2>Giỏ hàng của bạn đang trống</h2>
-            <p>Hãy thêm sản phẩm vào giỏ hàng để tiếp tục mua sắm</p>
-            <Link to="/" className="continue-shopping">
+          <Paper elevation={2} sx={{ p: 6, textAlign: 'center', backgroundColor: '#f9f9f9'}} >
+            <Typography variant="h4" sx={{ mb: 2, color: '#666' }}>
+              Giỏ hàng của bạn đang trống
+            </Typography>
+            <Typography variant="body1" sx={{ mb: 4, color: '#888' }}>
+              Hãy thêm sản phẩm vào giỏ hàng để tiếp tục mua sắm
+            </Typography>
+            <Button component={Link} to="/" variant="contained" size="large"
+              sx={{ backgroundColor: '#333', color: 'white', px: 4, py: 1.5, fontWeight: 'bold', fontSize: '16px',
+                '&:hover': { backgroundColor: '#555'}
+              }}
+            >
               Continue Shopping
-            </Link>
-          </div>
+            </Button>
+          </Paper>
         ) : (
-          <div className="cart-content">
+          <Grid container spacing={4} justifyContent="center">
             {/* Left Column - Cart Items */}
-            <div className="cart-items">
-              {cartItems.map((item, index) => (
-                <div key={`${item.id}-${item.size}-${index}`} className="cart-item">
-                  <div className="item-image">
-                    <img src={item.image} alt={item.title} />
-                  </div>
-                  <div className="item-details">
-                    <h3 className="item-title">{item.title}</h3>
-                    {item.brand && <p className="item-brand">{item.brand}</p>}
-                    {item.size && <p className="item-size">Size: {item.size}</p>}
-                    <div className="item-price">
-                      <span className="original-price">AED {item.price ? parseFloat(item.price).toFixed(2) : "0.00"}</span>
-                      <span className="sale-price">AED {item.salePrice ? parseFloat(item.salePrice).toFixed(2) : "0.00"}</span>
-                    </div>
-                    <div className="item-quantity">
-                      <button 
-                        className="quantity-btn"
-                        onClick={() => updateQuantity(item.id, item.size, -1)}
-                      >
-                        <FaMinus />
-                      </button>
-                      <input 
-                        type="number" 
-                        value={item.quantity}
-                        readOnly
-                      />
-                      <button 
-                        className="quantity-btn"
-                        onClick={() => updateQuantity(item.id, item.size, 1)}
-                      >
-                        <FaPlus />
-                      </button>
-                    </div>
-                  </div>
-                  <button 
-                    className="remove-btn"
-                    onClick={() => removeFromCart(item.id, item.size)}
+            <Grid item xs={12} md={8} >
+              <Stack spacing={3}>
+                {cartItems.map((item, index) => (
+                  <Card key={`${item.id}-${item.size}-${index}`} elevation={2}
+                    sx={{ p: 2, '&:hover': { boxShadow: 4 } }}
                   >
-                    REMOVE
-                  </button>
-                </div>
-              ))}
-            </div>
+                    <Grid container spacing={2} alignItems="center">
+                      {/* Product Image */}
+                      <Grid item xs={12} sm={3}>
+                        <Box component="img" src={item.image} alt={item.title}
+                          sx={{ width: '100%', height: 120, objectFit: 'cover', borderRadius: 1 }}
+                        />
+                      </Grid>
+                      
+                      {/* Product Details */}
+                      <Grid item xs={12} sm={6} md={8}>
+                        <Typography variant="h6" sx={{ fontWeight: 'bold', mb: 1, lineHeight: 1.2 }} >
+                          {item.title}
+                        </Typography>
+                        
+                        {item.brand && (
+                          <Typography variant="body2" sx={{ color: '#666', mb: 0.5 }} >
+                            Brand: {item.brand}
+                          </Typography>
+                        )}
+                        
+                        {item.size && (
+                          <Typography variant="body2" sx={{ color: '#666', mb: 1 }} >
+                            Size: {item.size}
+                          </Typography>
+                        )}
+                        
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2}}>
+                          <Typography variant="body1" sx={{ textDecoration: 'line-through', color: '#999' }} >
+                            AED {item.price ? parseFloat(item.price).toFixed(2) : "0.00"}
+                          </Typography>
+                          <Typography variant="h6" sx={{ color: '#e74c3c', fontWeight: 'bold', fontSize: '16px', }} >
+                            AED {item.salePrice ? parseFloat(item.salePrice).toFixed(2) : "0.00"}
+                          </Typography>
+                        </Box>
+                        
+                        {/* Quantity Controls */}
+                        <Box sx={{ 
+                          display: 'flex', 
+                          alignItems: 'center',
+                          gap: 1,
+                          border: '1px solid #ddd',
+                          borderRadius: 1,
+                          width: 'fit-content',
+                          p: 0.5
+                        }}>
+                          <IconButton size="small" onClick={() => updateQuantity(item.id, item.size, -1)}
+                            sx={{ minWidth: 26, height: 26 }}
+                          >
+                            <Remove fontSize="small" />
+                          </IconButton>
+                          
+                          <TextField value={item.quantity} size="small"
+                            InputProps={{ readOnly: true,
+                              sx: { width: 40, textAlign: 'center', '& input': { textAlign: 'center', p: 0, } }
+                            }}
+                          />
+                          
+                          <IconButton size="small" onClick={() => updateQuantity(item.id, item.size, 1)}
+                            sx={{ minWidth: 26, height: 26, }}
+                          >
+                            <Add fontSize="small" />
+                          </IconButton>
+                        </Box>
+                      </Grid>
+                      
+                      {/* Remove Button */}
+                      <Grid item xs={12} sm={3}>
+                        <Box sx={{ textAlign: { xs: 'left', sm: 'right' } }}>
+                          <Button
+                            variant="outlined" color="error" startIcon={<Delete />}
+                            onClick={() => removeFromCart(item.id, item.size)}
+                            sx={{ borderColor: '#e74c3c', color: '#e74c3c', fontWeight: 'bold', fontSize: '14px',
+                              '&:hover': { backgroundColor: '#e74c3c', color: 'white' }
+                            }}
+                          >
+                            REMOVE
+                          </Button>
+                        </Box>
+                      </Grid>
+                    </Grid>
+                  </Card>
+                ))}
+              </Stack>
+            </Grid>
 
             {/* Right Column - Summary */}
-            <div className="cart-summary">
-              <div className="promo-code">
-                <h3>Add Promo Code</h3>
-                <div className="promo-input">
-                  <input 
-                    type="text" 
-                    value={promoCode}
-                    onChange={(e) => setPromoCode(e.target.value)}
-                    placeholder="Enter promo code"
-                  />
-                  <button className="add-promo-btn">ADD</button>
-                </div>
-              </div>
+            <Grid item xs={12} md={4}>
+              <Stack spacing={3}>
+                {/* Promo Code Section */}
+                <Card elevation={2}>
+                  <CardContent>
+                    <Typography variant="h6" sx={{ mb: 2, fontWeight: 'bold' }} >
+                      Add Promo Code
+                    </Typography>
+                    <Box sx={{ display: 'flex', gap: 1 }}>
+                      <TextField fullWidth size="small" value={promoCode}
+                        onChange={(e) => setPromoCode(e.target.value)}
+                        placeholder="Enter promo code"
+                      />
+                      <Button variant="contained"
+                        sx={{ backgroundColor: '#333', minWidth: 80, fontWeight: 'bold',
+                          '&:hover': { backgroundColor: '#555' }
+                        }}
+                      >
+                        ADD
+                      </Button>
+                    </Box>
+                  </CardContent>
+                </Card>
 
-              <div className="summary-details">
-                <h3>Summary</h3>
-                <div className="summary-row">
-                  <span>Price ({cartItems.length} Items)</span>
-                  <span>AED {subtotal.toFixed(2)}</span>
-                </div>
-                <div className="summary-row">
-                  <span>Delivery Charge</span>
-                  <span>AED {deliveryCharge.toFixed(2)}</span>
-                </div>
-                <div className="summary-row total">
-                  <span>Total Price</span>
-                  <span>AED {total.toFixed(2)}</span>
-                </div>
-              </div>
+                {/* Summary Section */}
+                <Card elevation={2}>
+                  <CardContent>
+                    <Typography variant="h6" sx={{ mb: 2, fontWeight: 'bold' }} >
+                      Summary
+                    </Typography>
+                    
+                    <Stack spacing={1.5}>
+                      <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                        <Typography variant="body1" sx={{ fontSize: '14px' }}>
+                          Price ({cartItems.length} Items)
+                        </Typography>
+                        <Typography variant="body1" sx={{ fontSize: '14px' }}>
+                          AED {subtotal.toFixed(2)}
+                        </Typography>
+                      </Box>
+                      
+                      <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                        <Typography variant="body1" sx={{ fontSize: '14px' }}>
+                          Delivery Charge
+                        </Typography>
+                        <Typography variant="body1" sx={{ fontSize: '14px' }}>
+                          AED {deliveryCharge.toFixed(2)}
+                        </Typography>
+                      </Box>
+                      
+                      <Divider />
+                      
+                      <Box sx={{ display: 'flex', justifyContent: 'space-between', pt: 1 }}>
+                        <Typography variant="h6" sx={{ fontWeight: 'bold' }} >
+                          Total Price
+                        </Typography>
+                        <Typography variant="h6" sx={{ fontWeight: 'bold', color: '#e74c3c', fontSize: '16px', }} >
+                          AED {total.toFixed(2)}
+                        </Typography>
+                      </Box>
+                    </Stack>
+                  </CardContent>
+                </Card>
 
-              <div className="cart-actions">
-                <Link to="/" className="continue-shopping">
-                  CONTINUE SHOPPING
-                </Link>
-                <Link to="/checkout" className="place-order">
-                  PLACE ORDER
-                </Link>
-              </div>
-            </div>
-          </div>
+                {/* Action Buttons */}
+                <Stack spacing={2}>
+                  <Button
+                    component={Link} to="/"
+                    variant="outlined" size="large" fullWidth
+                    sx={{ borderColor: '#333', color: '#333', fontWeight: 'bold', py: 1.5,
+                      '&:hover': { borderColor: '#555', backgroundColor: 'rgba(51, 51, 51, 0.04)' }
+                    }}
+                  >
+                    CONTINUE SHOPPING
+                  </Button>
+                  
+                  <Button
+                    component={Link} to="/checkout" variant="contained" size="large" fullWidth
+                    sx={{ backgroundColor: '#e74c3c', color: 'white', fontWeight: 'bold', py: 1.5,
+                      '&:hover': { backgroundColor: '#c0392b' }
+                    }}
+                  >
+                    PLACE ORDER
+                  </Button>
+                </Stack>
+              </Stack>
+            </Grid>
+          </Grid>
         )}
-      </div>
+      </Container>
     </>
   );
 };

@@ -1,34 +1,100 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import './Breadcrumb.css';
+import { Link as RouterLink } from 'react-router-dom';
+import {
+    Breadcrumbs as MuiBreadcrumbs,
+    Link,
+    Typography,
+    styled,
+    Container,
+    Box
+} from '@mui/material';
+import NavigateNextIcon from '@mui/icons-material/NavigateNext';
+import HomeIcon from '@mui/icons-material/Home';
+  
+const BreadcrumbContainer = styled(Box)(({ theme }) => ({
+    padding: '12px 0',
+}));
+
+// Styled Breadcrumbs component
+const StyledBreadcrumbs = styled(MuiBreadcrumbs)(({ theme }) => ({
+    '& .MuiBreadcrumbs-separator': {
+        marginLeft: theme.spacing(1),
+        marginRight: theme.spacing(1),
+    },
+    '& .MuiBreadcrumbs-li': {
+        display: 'flex',
+        alignItems: 'center',
+    }
+}));
+
+// Styled Link component
+const BreadcrumbLink = styled(Link)(({ theme }) => ({
+    display: 'flex',
+    alignItems: 'center',
+    gap: '4px',
+    textDecoration: 'none',
+    color: '#333333',
+    fontSize: '16px',
+    transition: 'color 0.2s ease-in-out',
+    '&:hover': {
+        color: theme.palette.primary.main,
+        textDecoration: 'none',
+    },
+    '& .MuiSvgIcon-root': {
+        fontSize: '20px',
+        marginRight: '2px',
+    }
+}));
+
+// Styled current page text
+const CurrentPage = styled(Typography)(({ theme }) => ({
+    color: theme.palette.text.primary,
+    fontWeight: 500,
+    fontSize: '16px',
+}));
 
 const Breadcrumb = ({ items }) => {
-  return (
-    <div className="breadcumb">
-      {items.map((item, index) => (
-        <React.Fragment key={index}>
-          {index > 0 && (
-            <svg className="breadcumb-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <g clipPath="url(#clip0_2_19729)">
-                <path d="M24 0H0V24H24V0Z" fill="white" fillOpacity="0.01"/>
-                <path d="M9.5 6L15.5 12L9.5 18" stroke="#333333" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
-              </g>
-              <defs>
-                <clipPath id="clip0_2_19729">
-                  <rect width="24" height="24" fill="white"/>
-                </clipPath>
-              </defs>
-            </svg>
-          )}
-          {item.path ? (
-            <Link to={item.path}>{item.label}</Link>
-          ) : (
-            <span className="breadcumb-current">{item.label}</span>
-          )}
-        </React.Fragment>
-      ))}
-    </div>
-  );
+    return (
+        <BreadcrumbContainer>
+            <Container maxWidth="xl" disableGutters>
+                <Box sx={{ px: { xs: 2, sm: 3, md: 12.5 } }}>
+                    <StyledBreadcrumbs
+                        separator={
+                            <NavigateNextIcon 
+                                fontSize="small" 
+                                sx={{ color: 'text.secondary' }}
+                            />
+                        }
+                        aria-label="breadcrumb navigation"
+                    >
+                        {items.map((item, index) => {
+                            // If it's a link (has path)
+                            if (item.path) {
+                                return (
+                                    <BreadcrumbLink
+                                        key={index}
+                                        component={RouterLink}
+                                        to={item.path}
+                                        underline="none"
+                                    >
+                                        {index === 0 && <HomeIcon />}
+                                        {item.label}
+                                    </BreadcrumbLink>
+                                );
+                            }
+                            
+                            // If it's the current page (no path)
+                            return (
+                                <CurrentPage key={index} variant="body2">
+                                    {item.label}
+                                </CurrentPage>
+                            );
+                        })}
+                    </StyledBreadcrumbs>
+                </Box>
+            </Container>
+        </BreadcrumbContainer>
+    );
 };
 
 export default Breadcrumb; 
