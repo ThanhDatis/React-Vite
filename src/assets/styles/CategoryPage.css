@@ -1,4 +1,4 @@
-.category-container {
+/* .category-container {
   max-width: 100%;
   margin: 20px 0;
 }
@@ -104,7 +104,6 @@
   cursor: not-allowed;
 }
 
-/* Product Card Styles (moved from Skincare.css) */
 .product-card {
   position: relative;
   background-color: #fff;
@@ -131,7 +130,6 @@
   transform: scale(1.05);
 }
 
-/* Tags (NEW, SALE) */
 .product-tag {
   position: absolute;
   top: 10px;
@@ -149,4 +147,4 @@
 
 .product-tag.sale {
   background-color: #ff3333;
-} 
+}  */

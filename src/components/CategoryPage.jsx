@@ -1,13 +1,22 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import {
     Container,
     Box,
     Typography,
-    Pagination,
+    Button,
     styled,
     useTheme,
-    useMediaQuery
+    useMediaQuery,
+    IconButton,
+    Tooltip
 } from '@mui/material';
+import {
+    FirstPage,
+    LastPage,
+    ChevronLeft,
+    ChevronRight,
+} from '@mui/icons-material';
+
 import ProductCardItem from './ProductCardItem/index.jsx';
 import Breadcrumb from './Breadcrumb/Breadcrumb';
 
@@ -63,18 +72,151 @@ const CategoryHeader = styled(Typography)(({ theme }) => ({
     },
 }));
 
-const pageCalculators = {
-    default: (i) => i + 1,
-    early: (i) => i + 1,
-    late: (i, totalPages) => totalPages - 4 + i,
-    middle: (i, currentPage) => currentPage - 2 + i
+const PaginationContainer = styled(Box)(({ theme }) => ({
+    marginTop: theme.spacing(6),
+    marginBottom: theme.spacing(2),
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    gap: theme.spacing(0.5),
+    flexWrap: 'wrap',
+}));
+
+const PaginationButton = styled(Button)(({ theme, active }) => ({
+    borderRadius: theme.spacing(1),
+    minWidth: 32,
+    minHeight: 32,
+    fontWeight: active ? 600 : 400,
+    transition: 'all 0.2s ease-in-out',
+    '&:hover': {
+        backgroundColor: active ? theme.palette.primary.dark : theme.palette.primary.light,
+        transform: 'translateY(-1px)',
+        boxShadow: theme.shadows[2],
+    },
+    '&:disabled': {
+        opacity: 0.5,
+        cursor: 'not-allowed',
+    }
+}));
+
+const NavigationButton = styled(IconButton)(({ theme }) => ({
+    minWidth: 32,
+    minHeight: 32,
+    padding: theme.spacing(0.75),
+    borderRadius: theme.spacing(1),
+    border: `1px solid ${theme.palette.divider}`,
+    transition: 'all 0.2s ease-in-out',
+    '&:hover': {
+        backgroundColor: theme.palette.primary.light,
+        borderColor: theme.palette.primary.main,
+        boxShadow: theme.shadows[2],
+        transform: 'translateY(-1px)',
+    },
+    '&:disabled': {
+        opacity: 0.5,
+        cursor: 'not-allowed',
+        '&:hover': {
+            boxShadow: 'none',
+            transform: 'none',
+        },
+    },
+}));
+
+const calculatePageNumbers = (currentPage, totalPages, maxVisiblePages = 5) => {
+    if (totalPages <= maxVisiblePages) {
+        return Array.from({ length: totalPages }, (_, i) => i + 1);
+    }
+    
+    const half = Math.floor(maxVisiblePages / 2);
+    let start = Math.max(1, currentPage - half);
+    let end = Math.min(totalPages, start + maxVisiblePages - 1);
+
+    if (end === totalPages) {
+        start = Math.max(1, end - maxVisiblePages + 1);
+    }
+
+    return Array.from({ length: end - start + 1 }, (_, i) => start + i);
 };
 
-const getPageMode = (currentPage, totalPages) => {
-    if (totalPages <= 5) return 'default';
-    if (currentPage <= 3) return 'early';
-    if (currentPage >= totalPages - 2) return 'late';
-    return 'middle';
+const CustomPagination = ({ 
+    currentPage, 
+    totalPages, 
+    onPageChange,
+    isMobile
+}) => {
+    const theme = useTheme();
+    const maxVisiblePages = isMobile ? 3 : 5;
+    const pageNumbers = calculatePageNumbers(currentPage, totalPages, maxVisiblePages);
+
+    const handlePageChange = useCallback((pageNumber) => {
+        if (pageNumber >= 1 && pageNumber <= totalPages && pageNumber !== currentPage) {
+            onPageChange(null, pageNumber);
+        }
+    }, [currentPage, totalPages, onPageChange]);
+
+    if (totalPages <= 1) return null;
+
+    return (
+        <PaginationContainer>
+            <Tooltip title="First Page" placement="top">
+                <NavigationButton
+                    onClick={() => handlePageChange(1)}
+                    disabled={currentPage === 1}
+                    size={isMobile ? "small" : "medium"}
+                    aria-label='First Page'
+                >
+                    <FirstPage fontSize={isMobile ? "small" : "medium"} />
+                </NavigationButton>
+            </Tooltip>
+
+            <Tooltip title="Previous Page" placement="top">
+                <NavigationButton
+                    onClick={() => handlePageChange(currentPage - 1)}
+                    disabled={currentPage === 1}
+                    size={isMobile ? "small" : "medium"}
+                    aria-label='Previous Page'
+                >
+                    <ChevronLeft fontSize={isMobile ? "small" : "medium"} />
+                </NavigationButton>
+            </Tooltip>
+
+            {pageNumbers.map((pageNumber) => (
+                <PaginationButton
+                    key={pageNumber}
+                    onClick={() => handlePageChange(pageNumber)}
+                    variant={pageNumber === currentPage ? "contained" : "outlined"}
+                    size={isMobile ? "small" : "medium"}
+                    active={pageNumber === currentPage}
+                    aria-label={`Page ${pageNumber}`}
+                    aria-current={pageNumber === currentPage ? "page" : undefined}
+                >
+                    {pageNumber}
+                </PaginationButton>
+            ))}
+
+            <Tooltip title="Next Page" placement="top">
+                <NavigationButton
+                    onClick={() => handlePageChange(currentPage + 1)}
+                    disabled={currentPage === totalPages}
+                    size={isMobile ? "small" : "medium"}
+                    aria-label='Next Page'
+                >
+                    <ChevronRight fontSize={isMobile ? "small" : "medium"} />
+                </NavigationButton>
+            </Tooltip>
+
+            <Tooltip title="Last Page" placement="top">
+                <NavigationButton
+                    onClick={() => handlePageChange(totalPages)}
+                    disabled={currentPage === totalPages}
+                    size={isMobile ? "small" : "medium"}
+                    aria-label='Last Page'
+                >
+                    <LastPage fontSize={isMobile ? "small" : "medium"} />
+                </NavigationButton>
+            </Tooltip>
+        </PaginationContainer>
+    );
 };
 
 export default function CategoryPage({ 
@@ -85,23 +227,31 @@ export default function CategoryPage({
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
     const [currentPage, setCurrentPage] = useState(1);
-    
+
+    const [isChangingPage, setIsChangingPage] = useState(false);
+
     const indexOfLastProduct = currentPage * productsPerPage;
     const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
     const currentProducts = products.slice(indexOfFirstProduct, indexOfLastProduct);
-    
+
     const totalPages = Math.ceil(products.length / productsPerPage);
 
-    const handlePageChange = (event, pageNumber) => {
+    const handlePageChange = useCallback((event, pageNumber) => {
+        setIsChangingPage(true);
         setCurrentPage(pageNumber);
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    };
+
+        setTimeout(() => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            setIsChangingPage(false);
+        }, 300);
+    }, []);
 
     const breadcrumbItems = [
         { label: 'Home', path: '/' },
         { label: categoryName }
     ];
-
+    
+    
     return (
         <>
             <Breadcrumb items={breadcrumbItems} />
@@ -110,17 +260,18 @@ export default function CategoryPage({
                     {categoryName}
                 </CategoryHeader>
                 
-                <ProductsGrid>
-                    {currentProducts.map((product) => (
-                        <Box key={product.id}
-                            sx={{ transition: 'transform 0.2s ease-in-out', '&:hover': { transform: 'translateY(-4px)' } }}
-                        >
-                            <ProductCardItem product={product} />
-                        </Box>
-                    ))}
-                </ProductsGrid>
-                
-                {totalPages > 1 && (
+                <Box sx={{ transition: 'opacity 0.4s ease', opacity: isChangingPage ? 0.6 : 1 }}>
+                    <ProductsGrid>
+                        {currentProducts.map((product) => (
+                            <Box key={product.id}
+                                sx={{ transition: 'transform 0.2s ease-in-out', '&:hover': { transform: 'translateY(-4px)' } }}
+                            >
+                                <ProductCardItem product={product} />
+                            </Box>
+                        ))}
+                    </ProductsGrid>
+                </Box>
+                {/* {totalPages > 1 && (
                     <Box sx={{ mt: 6, mb: 2, display: 'flex', justifyContent: 'center',
                             '& .MuiPagination-ul': { gap: 1 }
                         }}
@@ -144,7 +295,13 @@ export default function CategoryPage({
                             }}
                         />
                     </Box>
-                )}
+                )} */}
+                <CustomPagination
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    onPageChange={handlePageChange}
+                    isMobile={isMobile}
+                />
             </CategoryContainer>
         </>
     );
