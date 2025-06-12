@@ -106,6 +106,7 @@ const UserDropdown = () => {
                                 to="/user-account" 
                                 className="menu-item" 
                                 onClick={(e) => {
+                                    e.preventDefault();
                                     console.log('Navigating to user account');
                                     setIsOpen(false);
                                 }}

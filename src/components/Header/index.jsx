@@ -1,15 +1,11 @@
 import React from 'react';
-import HeaderTopBar from './HeaderTopBar';
-import HeaderNavBar from './HeaderNavBar';
-import UserDropdown from '../UserDropdown/UserDropdown';
+import Header from './Header';
 
-const Header = () => {
+
+const HeaderComponent = () => {
     return (
-        <header className="header">
-            <HeaderTopBar />
-            <HeaderNavBar />
-        </header>
+        <Header />
     );
 };
 
-export default Header; 
+export default HeaderComponent; 

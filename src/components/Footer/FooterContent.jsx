@@ -140,9 +140,7 @@ export default function FooterContent() {
   return (
     <Box component="footer" sx={{ backgroundColor: '#E8E8E8', pt: 6, pb: 2 }}>
       <Container maxWidth="lg" 
-      sx={{
-        px: 2,
-      }}>
+      sx={{ px: 2, }}>
         <Grid container spacing={1.5}>
           {/* Logo và Social Icons */}
           <Grid item xs={12} sm={6} md={3}>
@@ -150,11 +148,7 @@ export default function FooterContent() {
               <Typography 
                 variant="h5" 
                 component="div" 
-                sx={{ 
-                  fontWeight: 'bold',
-                  mb: 2,
-                  color: '#333333'
-                }}
+                sx={{ fontWeight: "bold", mb: 2, color: "#333333" }}
               >
                 YOUR LOGO
               </Typography>
