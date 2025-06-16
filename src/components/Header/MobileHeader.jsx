@@ -203,7 +203,7 @@ const MobileHeader = ({
 
     // Mobile Drawer Content
     const drawerContent = (
-        <Box sx={{ width: 300 }} role="presentation">
+        <Box sx={{ width: 280 }} role="presentation">
             <DrawerHeader>
                 <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
                     Menu

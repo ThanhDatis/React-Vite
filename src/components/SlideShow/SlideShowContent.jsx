@@ -1,73 +1,294 @@
-import React, { useState, useEffect } from 'react';
-import './SlideShow.css'
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import {
+    Box,
+    IconButton,
+    Paper,
+    useTheme,
+    Fade,
+    Stack
+} from '@mui/material';
+import {
+    ChevronLeft,
+    ChevronRight,
+    Circle,
+    CircleOutlined
+} from '@mui/icons-material';
 
-export default function SlideShowContent({ currentSlide, setCurrentSlide }) {
+const NavigationButton = React.memo(({ direction, onClick, sx }) => {
+    const Icon = direction === 'prev' ? ChevronLeft : ChevronRight;
+
+    return (
+        <IconButton
+            onClick={onClick}
+            sx={sx}
+            aria-label={direction === 'prev' ? 'Previous slide' : 'Next slide'}
+        >
+            <Icon fontSize="large" />
+        </IconButton>
+    );
+});
+
+const DotIndicator = React.memo(({ index, isActive, onClick }) => {
+    return (
+        <IconButton 
+            onClick={onClick}
+            size="small"
+            aria-label={`Go to slide ${index}`}
+            sx={{
+                p: 0.5,
+                color: isActive ? 'white' : 'rgba(255, 255, 255, 0.5)',
+                '&:hover': {
+                    color: 'white',
+                    transform: 'scale(1.2)'
+                },
+                transition: 'all 0.2s ease-in-out'
+            }}
+        >
+            {isActive ? (
+                <Circle sx={{ fontSize: 12 }} />
+            ) : (
+                <CircleOutlined sx={{ fontSize: 12 }} />
+            )}
+        </IconButton>
+    );
+});
+
+export default function SlideShowContent() {
     const [slideIndex, setSlideIndex] = useState(1);
+    const [isPaused, setIsPaused] = useState(false);
+    const theme = useTheme();
 
-    const plusSlides = (n) => {
-        let newIndex = slideIndex + n;
-        if (newIndex > 3) newIndex = 1;
-        if (newIndex < 1) newIndex = 3;
-        setSlideIndex(newIndex);
-    };
+    const slides = useMemo(() => [
+        { id: 1, src: "/src/assets/images/image.png", alt: "Slide 1" },
+        { id: 2, src: "/src/assets/images/image.png", alt: "Slide 2" },
+        { id: 3, src: "/src/assets/images/image.png", alt: "Slide 3" }
+    ],[]);
 
-    const currentSlideHandler = (n) => {
+    const totalSlides = slides.length;
+
+    //memoized style objects
+    const containerStyles = useMemo(() => ({
+        position: 'relative',
+        width: '100%',
+        maxWidth: 1300,
+        margin: '0 auto',
+        borderRadius: 2,
+        overflow: 'hidden',
+        boxShadow: theme.shadows[4]
+    }), [theme.shadows]);
+
+    const slideContainerStyles = useMemo(() => ({
+        position: 'relative',
+        width: '100%',
+        height: { xs: 300, sm: 400, md: 500 },
+        bgcolor: 'grey.100'
+    }), []);
+
+    const prevButtonStyles = useMemo(() => ({
+        position: 'absolute',
+        top: '50%',
+        left: 16,
+        transform: 'translateY(-50%)',
+        bgcolor: 'rgba(255, 255, 255, 0.8)',
+        color: 'grey.800',
+        width: 48,
+        height: 48,
+        '&:hover': {
+            bgcolor: 'rgba(255, 255, 255, 0.9)',
+            transform: 'translateY(-50%) scale(1.1)'
+        },
+        transition: 'all 0.2s ease-in-out'
+    }), []);
+
+    const nextButtonStyles = useMemo(() => ({
+        position: 'absolute',
+        top: '50%',
+        right: 16,
+        transform: 'translateY(-50%)',
+        bgcolor: 'rgba(255, 255, 255, 0.8)',
+        color: 'grey.800',
+        width: 48,
+        height: 48,
+        '&:hover': {
+            bgcolor: 'rgba(255, 255, 255, 0.9)',
+            transform: 'translateY(-50%) scale(1.1)'
+        },
+        transition: 'all 0.2s ease-in-out'
+    }), []);
+
+    const dotContainerStyles = useMemo(() => ({
+        position: 'absolute',
+        bottom: 16,
+        left: '50%',
+        transform: 'translateX(-50%)',
+        bgcolor: 'rgba(0, 0, 0, 0.3)',
+        borderRadius: 3,
+        p: 1
+    }), []);
+
+    
+    const plusSlides = useCallback((n) => {
+        setSlideIndex (prev => {
+            let newIndex = prev + n;
+            if (newIndex > totalSlides) newIndex = 1;
+            if (newIndex < 1) newIndex = totalSlides;
+            return newIndex;
+        });
+    }, [totalSlides]);
+
+    const goToSlide = useCallback((n) => {
         setSlideIndex(n);
-    };
+    }, []);
+
+    const handleKeyDown = useCallback((event) => {
+        switch (event.key) {
+            case 'ArrowLeft':
+                event.preventDefault();
+                plusSlides(-1);
+                break;
+            case 'ArrowRight':
+                event.preventDefault();
+                plusSlides(1);
+                break;
+            case ' ':
+                event.preventDefault();
+                setIsPaused(prev => !prev);
+                break;
+            case 'Home':
+                event.preventDefault();
+                goToSlide(1);
+                break;
+            case 'End':
+                event.preventDefault();
+                goToSlide(totalSlides);
+                break;
+            default:
+                break;
+        }
+    }, [plusSlides, goToSlide, totalSlides]);
+
+    const handleMouseEnter = useCallback(() => {
+        setIsPaused(true);
+    }, []);
+
+    const handleMouseLeave = useCallback(() => {
+        setIsPaused(false);
+    }, []);
 
     useEffect(() => {
-        // Auto slideshow
+        if (!isPaused) return;
+
         const interval = setInterval(() => {
-            plusSlides(1);
+            setSlideIndex(prev => (prev % totalSlides) + 1);
         }, 5000);
 
         return () => clearInterval(interval);
-    }, [slideIndex]);
+    }, [isPaused, totalSlides]);
+
+    useEffect(() => {
+        const handleGlobalKeyDown = (event) => {
+            if (document.activeElement?.closest('[role="region"]')) {
+                handleKeyDown(event);
+            }
+        };
+
+        document.addEventListener('keydown', handleGlobalKeyDown);
+        return () => document.removeEventListener('keydown', handleGlobalKeyDown);
+    }, [handleKeyDown]);
 
     return (
-        <div className="slideshow-container">
-            <div className="mySlides fade" style={{ display: slideIndex === 1 ? 'block' : 'none' }}>
-                <img className="image" src="/src/assets/images/image.png" alt="Slide 1"/>
-            </div>
-            <div className="mySlides fade" style={{ display: slideIndex === 2 ? 'block' : 'none' }}>
-                <img className="image" src="/src/assets/images/image.png" alt="Slide 2"/>
-            </div>
-            <div className="mySlides fade" style={{ display: slideIndex === 3 ? 'block' : 'none' }}>
-                <img className="image" src="/src/assets/images/image.png" alt="Slide 3"/>
-            </div>
+        <Box
+            sx={containerStyles}
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+            onKeyDown={handleKeyDown}
+            tabIndex={0}
+            role="region"
+            aria-label="Image slideshow"
+            aria-live="polite"
+            aria-roledescription="carousel"
+        >
+            <Box sx={slideContainerStyles} >
+                {slides.map((slide) => (
+                    <Fade
+                        key={slide.id}
+                        in={slideIndex === slide.id}
+                        timeout={500}
+                    >
+                        <Box
+                            sx={{
+                                position: 'absolute',
+                                top: 0,
+                                left: 0,
+                                width: '100%',
+                                height: '100%',
+                                display: slideIndex === slide.id ? 'block' : 'none'
+                            }}
+                            role="img"
+                            aria-label={slide.alt}
+                        >
+                            <Box
+                                component="img"
+                                src={slide.src}
+                                alt={slide.alt}
+                                sx={{
+                                    width: '100%',
+                                    height: '100%',
+                                    objectFit: 'cover',
+                                    display: 'block'
+                                }}
+                                aria-hidden="true"
+                            />
+                        </Box>
+                    </Fade>
+                ))}
+            </Box>
 
-            <a className="prev" onClick={() => plusSlides(-1)}>
-                <svg className="prev-svg" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <g clipPath="url(#clip0_2_21410)">
-                        <path d="M24 0H0V24H24V0Z" fill="white" fillOpacity="0.01"/>
-                        <path d="M15.5 18L9.5 12L15.5 6" stroke="#333333" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round"/>
-                    </g>
-                    <defs>
-                        <clipPath id="clip0_2_21410">
-                            <rect width="24" height="24" fill="white"/>
-                        </clipPath>
-                    </defs>
-                </svg>                
-            </a>
-            <a className="next" onClick={() => plusSlides(1)}>
-                <svg className="next-svg" width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <g clipPath="url(#clip0_2_19729)">
-                        <path d="M24 0H0V24H24V0Z" fill="white" fillOpacity="0.01"/>
-                        <path d="M9.5 6L15.5 12L9.5 18" stroke="#333333" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round"/>
-                    </g>
-                    <defs>
-                        <clipPath id="clip0_2_19729">
-                            <rect width="26" height="26" fill="white"/>
-                        </clipPath>
-                    </defs>
-                </svg>                
-            </a>
+            <Box 
+                sx={{ position: 'absolute', left: -9999, width: 1, height: 1 }}
+                aria-label='polite'
+                aria-atomic='true'
+            >
+                Slide {slideIndex} of {totalSlides}
+            </Box>
 
-            <div className="dots-container" style={{textAlign: 'center'}}>
-                <span className={`dot${slideIndex === 1 ? ' active' : ''}`} onClick={() => currentSlideHandler(1)}></span>
-                <span className={`dot${slideIndex === 2 ? ' active' : ''}`} onClick={() => currentSlideHandler(2)}></span>
-                <span className={`dot${slideIndex === 3 ? ' active' : ''}`} onClick={() => currentSlideHandler(3)}></span>
-            </div>
-        </div>
-    )
-} 
+            {/* Previous Button */}
+            <NavigationButton
+                direction="prev"
+                onClick={() => plusSlides(-1)}
+                sx={prevButtonStyles}
+            />
+
+            {/* Next Button */}
+            <NavigationButton
+                direction="next"
+                onClick={() => plusSlides(1)}
+                sx={nextButtonStyles}
+            />
+
+            {/* Dots Indicator */}
+            <Box 
+                sx={dotContainerStyles}
+                role="tablist"
+                aria-label="Slide navigation"
+            >
+                <Stack direction="row" spacing={1}>
+                    {slides.map((slide) => (
+                        <DotIndicator
+                            key={slide.id}
+                            index={slide.id}
+                            isActive={slideIndex === slide.id}
+                            onClick={() => goToSlide(slide.id)}
+                        />
+                    ))}
+                </Stack>
+            </Box>
+
+            <Box
+                sx={{ position: 'absolute', left: -9999, width: 1, height: 1 }}
+            >
+                Use arrow keys to navigate slides, spacebar to pause/resume, Home/End to go to first/last slide
+            </Box>
+        </Box>
+    );
+}

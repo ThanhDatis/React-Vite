@@ -196,27 +196,22 @@ const LoginForm = ({
 );
 
 const DesktopHeader = ({
-    // Auth data
     currentUser,
     
-    // States
     // showLoginForm,
     searchValue,
     username,
     password,
     error,
     
-    // Menu states
     isUserMenuOpen,
     isBrandsMenuOpen,
     userMenuAnchor,
     brandsMenuAnchor,
     
-    // Data
     brands,
     navItems,
     
-    // Handlers
     handleLogin,
     handleLogout,
     handleUserMenuToggle,
@@ -228,7 +223,6 @@ const DesktopHeader = ({
     handleSearchChange,
     closeAllMenus,
     
-    // Setters
     setUsername,
     setPassword,
 }) => {
