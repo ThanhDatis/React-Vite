@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useCart } from '../../context/CartContext';
-import Breadcrumb from '../Breadcrumb/Breadcrumb';
+import Breadcrumb from '../ui/Breadcrumb/Breadcrumb';
 import {
   Box,
   Container,
@@ -31,7 +31,7 @@ const CheckoutContent = () => {
   const { cartItems, getCartTotal } = useCart();
   const [activeStep, setActiveStep] = useState(0);
   const [promoCode, setPromoCode] = useState('');
-  const [errors, setErrors] = useState({
+  const [errors, setErrors] = useState({ // eslint-disable-line no-unused-vars
     cardholderName: '',
     cardNumber: '',
     expiryDate: '',

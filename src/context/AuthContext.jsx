@@ -15,7 +15,7 @@ export const AuthProvider = ({ children }) => {
         );
         
         if (user) {
-            const { password, ...userWithoutPassword } = user;
+            const { password, ...userWithoutPassword } = user;  // eslint-disable-line no-unused-vars
             setCurrentUser(userWithoutPassword);
             localStorage.setItem('currentUser', JSON.stringify(userWithoutPassword));
             return true;

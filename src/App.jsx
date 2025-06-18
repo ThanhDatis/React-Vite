@@ -3,27 +3,21 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import { CartProvider } from './context/CartContext'
 import { AuthProvider } from './context/AuthContext'
 
-// import './App.css'
-import './index.css'
-import './assets/styles/Header.css'
-import './assets/styles/HeaderMenuIcons.css'
+import './assets/styles/index.css'
 import './assets/styles/HomePage.css'
 import './assets/styles/UserShow.css'
-import './assets/styles/Registration.css'
-import './assets/styles/CategoryPage.css'
 
-import Header from './components/Header/index.jsx'
-import HomePage from './components/HomePage'
-import SlideShow from './components/SlideShow/index.jsx'
-import Registration from './components/Registration'
-import Footer from './components/Footer/index.jsx'
-import ProductDetail from './components/ProductDetail/index.jsx'
-import Cart from './components/Cart/index.jsx'
-import Checkout from './components/Checkout/index.jsx'
-import UserAccount from './components/UserAccount/index.jsx'
+import Header from './components/layouts/Header/index.jsx'
+import SlideShow from './components/product/SlideShow'
+import Footer from './components/layouts/Footer/index.jsx'
+import ProductDetail from './components/product/ProductDetail'
+import Cart from './pages/Cart/CartContent'
+import Checkout from './components/Checkout/CheckoutContent'
+import HomePage from './pages/HomePage'
+import Registration from './pages/Registration'
+import UserAccount from './pages/Account/UserAccountContent'
 
-// Import the CategoryFactory for dynamic category routing
-import CategoryFactory from './pages/CategoryFactory'
+import CategoryFactory from './pages/CategoryPage/CategoryFactory'
 
 function AppContent() {
   const [currentSlide, setCurrentSlide] = useState(0)
