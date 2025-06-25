@@ -6,6 +6,7 @@ import { AuthProvider } from './context/AuthContext'
 import './assets/styles/index.css'
 import './assets/styles/HomePage.css'
 import './assets/styles/UserShow.css'
+import './assets/styles/Registration.css'
 
 import Header from './components/layouts/Header/index.jsx'
 import SlideShow from './components/product/SlideShow'

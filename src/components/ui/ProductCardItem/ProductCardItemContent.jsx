@@ -18,7 +18,7 @@ import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
 import { Link } from 'react-router-dom';
 
 // Styled components
-const StyledCard = styled(Card)(({ theme }) => ({
+const StyledCard = styled(Card)(() => ({  
   position: 'relative',
   display: 'flex',
   flexDirection: 'column',
@@ -59,7 +59,7 @@ const ImageContainer = styled(Box)({
   overflow: 'hidden',
 });
 
-const CategoryChip = styled(Chip)(({ theme }) => ({
+const CategoryChip = styled(Chip)(() => ({
   position: 'absolute',
   top: 10,
   left: 10,
@@ -87,7 +87,7 @@ const ProductActions = styled(Box)({
   zIndex: 2,
 });
 
-const ActionButton = styled(IconButton)(({ theme }) => ({
+const ActionButton = styled(IconButton)(() => ({
   backgroundColor: '#fff',
   width: 32,
   height: 32,
@@ -138,10 +138,10 @@ const ProductCardItem = memo (({
   imageSizes = "300px" ,
   showFeedback = true,
 }) => {
-  const [imageLoaded, setImageLoaded] = useState(false);
-  const [snackbar, setSnackbar] = useState({
+  const [ImageLoaded, setImageLoaded] = useState(false);
+  const [Snackbar, setSnackbar] = useState({
     open: false,
-    message: '',
+    message: '',  
     severity: 'success',
   });
 
@@ -163,9 +163,9 @@ const ProductCardItem = memo (({
     }
   }, [showFeedback]);
 
-  const handleCloseSnackbar = useCallback(() => {
-    setSnackbar(prev => ({ ...prev, open: false }));
-  }, []);
+  // const handleCloseSnackbar = useCallback(() => {
+  //   setSnackbar(prev => ({ ...prev, open: false }));
+  // }, []);
 
   const handleWishlistClick = useCallback(async(e) => {
     e.preventDefault();
@@ -176,10 +176,11 @@ const ProductCardItem = memo (({
         await onWishlistClick(product);
         showSnackbar(`${product.title} added to wishlist`);
       } else {
-        console.log('Added to wishlist:', product.id);
+        console.log('Added to wishlist: ', product.id);
         showSnackbar(`${product.title} added to wishlist`);
       }
-    } catch (error) {
+    } catch (Error) {
+      console.log('Wishlist Error: ', Error);
       showSnackbar(`Failed to add to wishlist`, 'error');
     }
   }, [product, onWishlistClick, showSnackbar]);
@@ -196,7 +197,8 @@ const ProductCardItem = memo (({
         console.log('Added to cart:', product.id);
         showSnackbar(`${product.title} added to cart`);
       }
-    } catch (error) {
+    } catch (Error) { 
+      console.log('Cart Error: ', Error);
       showSnackbar(`Failed to add to cart`, 'error');
     }
   }, [product, onCartClick, showSnackbar]);
