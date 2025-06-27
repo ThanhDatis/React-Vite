@@ -3,7 +3,6 @@ import {
   Grid,
   Avatar,
   Stack,
-  useTheme,
   useMediaQuery
 } from '@mui/material';
 import {
@@ -29,6 +28,7 @@ import {
     StyledDivider,
     UploadText
 } from '../assets/styles/RegistrationStyle';
+import { useCustomTheme } from '../theme/utils';
 
 const validationSchema = Yup.object({
     firstName: Yup.string()
@@ -84,7 +84,7 @@ const FormField = ({ name, label, type = 'text', ...props }) => (
 );
 
 export default function Registration() {
-  const theme = useTheme();
+  const theme = useCustomTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [uploadedImage, setUploadedImage] = useState(null);
 

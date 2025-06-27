@@ -1,12 +1,15 @@
 import { useState } from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import { ThemeProvider } from '@mui/material/styles'
+import { CssBaseline } from '@mui/material'
 import { CartProvider } from './context/CartContext'
 import { AuthProvider } from './context/AuthContext'
+
+import theme from './theme/theme'
 
 import './assets/styles/index.css'
 import './assets/styles/HomePage.css'
 import './assets/styles/UserShow.css'
-import './assets/styles/Registration.css'
 
 import Header from './components/layouts/Header/index.jsx'
 import SlideShow from './components/product/SlideShow'
@@ -53,13 +56,16 @@ function AppContent() {
 
 function App() {
   return (
-    <AuthProvider>
-      <CartProvider>
-        <Router>
-          <AppContent />
-        </Router>
-      </CartProvider>
-    </AuthProvider>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <AuthProvider>
+        <CartProvider>
+          <Router>
+            <AppContent />
+          </Router>
+        </CartProvider>
+      </AuthProvider>
+    </ThemeProvider>
   );
 }
 
