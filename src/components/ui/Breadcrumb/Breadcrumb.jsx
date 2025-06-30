@@ -13,6 +13,8 @@ import HomeIcon from '@mui/icons-material/Home';
   
 const BreadcrumbContainer = styled(Box)(() => ({
     padding: '12px 0',
+    paddingLeft: '30px',
+    paddingRight: '30px',
 }));
 
 // Styled Breadcrumbs component

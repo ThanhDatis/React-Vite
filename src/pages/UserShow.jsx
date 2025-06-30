@@ -14,16 +14,10 @@ import {
     useTheme,
     useMediaQuery
 } from '@mui/material';
-import { Facebook, Twitter, Youtube } from '@mui/icons-material';
+import { Facebook, Twitter, YouTube } from '@mui/icons-material';
 import { useFormik } from 'formik';
-import * as Yup from 'yup';
 import { useUserShowStyles } from '../theme/utils';
 import userAvatar from '../assets/images/image.png';
-
-// const userActionSchema = yup.object ({
-//     userId: yup.number().required('User ID is required'),
-//     action: yup.string().required('Action is required')
-// });
 
 export default function UserShow() {
     const theme = useTheme();
@@ -59,25 +53,25 @@ export default function UserShow() {
     const socialIcons = [
         { 
             name: 'Facebook', 
-            icon: <Facebook />,
+            icon: Facebook,
             color: theme.custom.colors.social.facebook,
             href: '#facebook',
         },
         { 
             name: 'Twitter', 
-            icon: <Twitter />, 
+            icon: Twitter, 
             color: '#000000',
             href: '#twitter'
         },
         { 
             name: 'YouTube', 
-            icon: <Youtube /> ,
+            icon: YouTube,
             color: '#000000',
             href: '#youtube'
         }
     ];
 
-    // Component tái sử dụng cho UserCard
+    // Component tái sử cho UserCard
     const UserCard = ({ user }) => (
         <Card sx={styles.userCard}>
             <CardContent sx={styles.userCardContent}>
@@ -134,11 +128,11 @@ export default function UserShow() {
 
     const UserSection = ({ title, seeAllText, seeAllHref = "#" }) => (
         <Box component="section" sx={styles.userSection}>
-            <Container maxWidth="lg" sx={styles.userSectionContainer}>
-                <Box sx={styles.SectionHeader}>
+            <Container maxWidth="lg" sx={styles.sectionContainer}>
+                <Box sx={styles.sectionHeader}>
                     <Typography 
                         variant="h4" 
-                        sx={styles.userSectionTitle}
+                        sx={styles.sectionTitle}
                         component="h2"
                     >
                         {title}
@@ -169,8 +163,6 @@ export default function UserShow() {
     return (
         <Box sx={styles.mainContainer}>
             <UserSection title="AMBASSADORS" seeAllText="See all ambassadors" />
-
-
         </Box>
     );
 }

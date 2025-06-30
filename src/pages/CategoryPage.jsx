@@ -253,7 +253,7 @@ export default function CategoryPage({
   return (
     <>
       <Breadcrumb items={breadcrumbItems} />
-      <CategoryContainer>
+      <CategoryContainer >
         <CategoryHeader variant={isMobile ? "h5" : "h4"} component="h1">
           {categoryName}
         </CategoryHeader>

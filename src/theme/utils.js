@@ -265,7 +265,7 @@ export const createButtonStyle = (variant = 'primary') => {
     return variants[variant] || variants.primary;
 };
 
-export const createInputStyle = (variant = 'outlined') => {
+export const createInputStyle = () => {
     return {
         '& .MuiOutlinedInput-root': {
             '& fieldset': {
@@ -331,7 +331,7 @@ export const createCardStyle = (elevation = 'medium') => {
 };
 
 // UserShow specific utilities
-export const createUserCardStyle = (theme) => ({
+export const createUserCardStyle = () => ({
     height: '100%',
     display: 'flex',
     flexDirection: 'column',
@@ -364,13 +364,226 @@ export const createSocialIconStyle = (socialColor) => ({
     },
 });
 
-export const createGridResponsiveColumns = (theme) => ({
+export const createGridResponsiveColumns = () => ({
     xs: 12,
     sm: 6,
     md: 4,
     lg: 3,
 });
 
-export const responsive = {
+const responsive = {
     mobile: '@media (max-width: 767px)',
-    tablet: '@media (min-width:
+    tablet: '@media (min-width: 768px) and (max-width: 1023px)',
+    desktop: '@media (min-width: 1024px)',
+    largeDesktop: '@media (min-width: 1200px)',
+
+    xs: '@media (max-width: 599px)',
+    sm: '@media (min-width: 600px)',
+    md: '@media (min-width: 960px)',
+    lg: '@media (min-width: 1280px)',
+    xl: '@media (min-width: 1920px)',
+
+    up: (key) => {
+      const bp = {
+        xs: 0,
+        sm: 600,
+        md: 900,
+        lg: 1200,
+        xl: 1536,
+      };
+      return `@media (min-width: ${bp[key]}px)`;
+    },
+
+    down: (key) => {
+        const bp = {
+            xs: 599,
+            sm: 899,
+            md: 1199,
+            lg: 1535,
+            xl: 1920,
+        };
+        return `@media (max-width: ${bp[key]}px)`;
+    },
+
+    between: (start, end) => {
+      const bp = {
+        xs: 0,
+        sm: 600,
+        md: 900,
+        lg: 1200,
+        xl: 1536,
+      };
+      return `@media (min-width: ${bp[start]}px) and (max-width: ${bp[end] - 1}px)`;
+    },
+  };
+
+  const createAnimationStyle = (type = 'fadeIn', duration = '0.5s') => {
+    const animations = {
+        fadeIn: {
+          '@keyframes fadeIn': {
+            from: { opacity : 0},
+            to: { opacity: 1 },
+          },
+          animation: `fadeIn ${duration} ease-in-out`,
+        },
+        slideUp: {
+          '@keyframes slideUp': {
+            from: { transform: 'translateY(20px)', opacity: 0 },
+            to: { transform: 'translateY(0)', opacity: 1 },
+          },
+          animation: `slideUp ${duration} ease-out`,
+        },
+        slideDown: {
+          '@keyframes slideDown': {
+            from: { transform: 'translateY(-20px)', opacity: 0 },
+            to: { transform: 'translateY(0)', opacity: 1 },
+          },
+          animation: `slideDown ${duration} ease-out`,
+        },
+        scaleIn: {
+          '@keyframes scaleIn': {
+            from: { transform: 'scale(0.8)', opacity: 0 },
+            to: { transform: 'scale(1)', opacity: 1 },
+          },
+          animation: `scaleIn ${duration} ease-out`,
+        },
+        pulse: {
+          '@keyframes pulse': {
+            '0%': { transform: 'scale(1)'},
+            '50%': { transform: 'scale(1.05)' },
+            '100%': { transform: 'scale(1)' }
+          },
+          animation: `pulse ${duration} ease-in-out infinite`,
+        }
+    };
+
+    return animations[type] || animations.fadeIn;
+  };
+
+const createFlexStyle = (direction = 'row', justify = 'flex-start', align = 'stretch', wrap = 'nowrap') => ({
+    display: 'flex',
+    flexDirection: direction,
+    justifyContent: justify,
+    alignItems: align,
+    flexWrap: wrap,
+});
+
+const createGridStyle = ( gap = spacing.md, minItemWidth = '250px') => ({
+    display: 'grid',
+    gridTemplateColumns: `repeat(auto-fit, minmax(${minItemWidth}, 1fr))`,
+    gap: `${gap}px`,
+    width: '100%',
+});
+
+// Form utilities
+const createFormFieldStyle = (error = false) => ({
+    marginBottom: spacing.lg,
+    '& .MuiFormLabel-root': {
+        color: error ? colors.status.error : colors.text.secondary,
+        fontSize: '0.875rem',
+        fontWeight: 500,
+    },
+    '& .MuiOutlinedInput-root': {
+        backgroundColor: colors.secondary.main,
+        '& fieldset': {
+            borderColor: error ? colors.status.error : colors.border.light,
+            transition: transitions.fast,
+        },
+        '&:hover fieldset': {
+            borderColor: error ? colors.status.error : colors.border.dark,
+        },
+        '&.Mui-focused fieldset': {
+            borderColor: error ? colors.status.error : colors.primary.main,
+            boxShadow: error ? `0 0 0 2px ${colors.status.error}20` : shadows.focus,
+        },
+    },
+    '& .MuiFormHelperText-root': {
+        color: error ? colors.status.error : colors.text.secondary,
+        fontSize: '0.75rem',
+        marginTop: spacing.xs,
+    },
+});
+
+// Loading/skeleton utilities
+const createSkeletonStyle = (width = '100%', height = '20px', borderRadius = '4px') => ({
+    width,
+    height,
+    borderRadius,
+    backgroundColor: colors.border.light,
+    background: `linear-gradient(90deg, ${colors.border.light} 25%, ${colors.secondary.light} 50%, ${colors.border.light} 75%)`,
+    backgroundSize: '200% 100%',
+    animation: 'skeleton-loading 1.5s infinite',
+    '@keyframes skeleton-loading': {
+        '0%': { backgroundPosition: '200% 0' },
+        '100%': { backgroundPosition: '-200% 0' },
+    },
+});
+
+// Typography utilities
+const createTypographyStyle = (variant = 'body1', color = 'primary', weight = 'normal') => {
+    const variants = {
+        h1: { fontSize: '2rem', lineHeight: 1.2 },
+        h2: { fontSize: '1.75rem', lineHeight: 1.3 },
+        h3: { fontSize: '1.5rem', lineHeight: 1.3 },
+        h4: { fontSize: '1.25rem', lineHeight: 1.4 },
+        h5: { fontSize: '1.125rem', lineHeight: 1.4 },
+        h6: { fontSize: '1rem', lineHeight: 1.4 },
+        body1: { fontSize: '1rem', lineHeight: 1.5 },
+        body2: { fontSize: '0.875rem', lineHeight: 1.5 },
+        caption: { fontSize: '0.75rem', lineHeight: 1.4 },
+    };
+    
+    const colors_map = {
+        primary: colors.text.primary,
+        secondary: colors.text.secondary,
+        disabled: colors.text.disabled,
+        hint: colors.text.hint,
+        error: colors.status.error,
+        success: colors.status.success,
+        warning: colors.status.warning,
+        info: colors.status.info,
+    };
+    
+    const weights = {
+        light: 300,
+        normal: 400,
+        medium: 500,
+        semibold: 600,
+        bold: 700,
+    };
+    
+    return {
+        ...variants[variant],
+        color: colors_map[color] || colors.text.primary,
+        fontWeight: weights[weight] || 400,
+        margin: 0,
+        padding: 0,
+    };
+};
+
+// Utility for creating consistent spacing
+const createSpacingStyle = (top = 0, right = 0, bottom = 0, left = 0) => {
+    const getValue = (value) => {
+        if (typeof value === 'string') return value;
+        return `${spacing[value] || value * 8}px`;
+    };
+    
+    return {
+        paddingTop: getValue(top),
+        paddingRight: getValue(right),
+        paddingBottom: getValue(bottom),
+        paddingLeft: getValue(left),
+    };
+};
+
+// Export all utilities as named exports
+export {
+    responsive,
+    createAnimationStyle,
+    createFlexStyle,
+    createGridStyle,
+    createFormFieldStyle,
+    createSkeletonStyle,
+    createTypographyStyle,
+    createSpacingStyle,
+};
