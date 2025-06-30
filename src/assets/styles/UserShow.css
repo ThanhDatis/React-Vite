@@ -87,7 +87,6 @@
   .userShopButton:hover {
     background-color: #333;
   }
-  /* Responsive */
 @media (max-width: 1024px) {
     .userGrid {
       grid-template-columns: repeat(3, 1fr);
