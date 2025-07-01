@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useCart } from '../../context/CartContext';
+import { useCart } from '../../store/contexts/CartContext';
 import Breadcrumb from '../ui/Breadcrumb/Breadcrumb';
 import {
   Box,
@@ -270,7 +270,7 @@ const CheckoutContent = () => {
   const BillingField = [
     [
       { id: 'fullName', label: 'Họ và tên', value: (data) => `${data.firstName} ${data.lastName}`.trim() || 'Trống' },
-      { id: 'customerEmail', label: 'Email', value: (data) => data.email || 'Trống' }
+      { id: 'customerEmail', label: 'Email', value: (data) => data.email || "Trống" }
     ],
     [
       { id: 'customerPhone', label: 'Số điện thoại', value: (data) => data.phone || 'Trống' }

@@ -3,7 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import { FaHeart, FaMinus, FaPlus, FaStar } from 'react-icons/fa';
 import { categories } from '../../../data/productData';
 import Breadcrumb from '../../ui/Breadcrumb/Breadcrumb';
-import { useCart } from '../../../context/CartContext';
+import { useCart } from '../../../store/contexts/CartContext';
 import './ProductDetail.css';
 
 const ProductDetail = () => {

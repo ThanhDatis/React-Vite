@@ -2,14 +2,13 @@ import { useState } from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import { ThemeProvider } from '@mui/material/styles'
 import { CssBaseline } from '@mui/material'
-import { CartProvider } from './context/CartContext'
-import { AuthProvider } from './context/AuthContext'
+import { CartProvider } from './store/contexts/CartContext'
+import { AuthProvider } from './store/contexts/AuthContext'
 
 import theme from './theme/theme'
 
 import './assets/styles/index.css'
 import './assets/styles/HomePage.css'
-import './assets/styles/UserShow.css'
 
 import Header from './components/layouts/Header/index.jsx'
 import SlideShow from './components/product/SlideShow'

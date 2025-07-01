@@ -16,7 +16,7 @@ import {
 } from '@mui/material';
 import { Remove, Add, Delete } from '@mui/icons-material';
 import Breadcrumb from '../../components/ui/Breadcrumb/Breadcrumb';
-import { useCart } from '../../context/CartContext';
+import { useCart } from '../../store/contexts/CartContext';
 
 
 const CartContent = () => {
