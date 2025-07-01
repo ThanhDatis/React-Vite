@@ -23,7 +23,7 @@ export const useUserShowStyles = () => {
     return {
         mainContainer: {
             width: '100%',
-            minHeight: '100vh',
+            // minHeight: '100vh',
             backgroundColor: theme.palette.background.default,
         },
         
@@ -85,17 +85,11 @@ export const useUserShowStyles = () => {
         },
         
         userGrid: {
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(100px, 1fr))',
+            gap: spacing.xs,
             width: '100%',
             margin: 0,
-            '& .MuiGrid-container': {
-                margin: 0,
-                width: '100%',
-            },
-            '& .MuiGrid-item': {
-                paddingLeft: 0,
-                paddingTop: 0,
-                marginBottom: spacing.lg,
-            },
         },
         
         userCard: {
@@ -108,6 +102,7 @@ export const useUserShowStyles = () => {
             backgroundColor: colors.secondary.main,
             transition: transitions.hover,
             cursor: 'default',
+            // aspectRatio: '1/1',
             '&:hover': {
                 transform: 'translateY(-5px)',
                 boxShadow: shadows.cardHover,
@@ -118,40 +113,32 @@ export const useUserShowStyles = () => {
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            padding: theme.spacing(3, 2),
-            flexGrow: 1,
-            textAlign: 'center',
-        },
-        
-        userCardActions: {
-            padding: theme.spacing(0, 2, 3),
-            justifyContent: 'center',
+            // flexGrow: 1,
         },
         
         userAvatar: {
-            width: 120,
-            height: 120,
-            marginBottom: theme.spacing(2),
-            border: `2px solid ${colors.border.light}`,
-            [theme.breakpoints.down('sm')]: {
-                width: 100,
-                height: 100,
-            },
+            width: '100%',
+            height: 180,
+            objectFit: 'cover',
+            background: colors.border.light,
+            marginBottom: spacing.md,
+            border: 'none',
+            borderRadius: 0,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
         },
         
         userName: {
             color: colors.text.primary,
             fontWeight: 600,
-            fontSize: '1.125rem',
-            marginBottom: theme.spacing(0.5),
-            textAlign: 'center',
+            fontSize: 18,
         },
         
         userUsername: {
             color: colors.text.secondary,
-            fontSize: '0.875rem',
-            marginBottom: theme.spacing(2),
-            textAlign: 'center',
+            fontSize: 14,
+            marginBottom: spacing.xs,
         },
         
         socialIconsContainer: {
@@ -177,14 +164,13 @@ export const useUserShowStyles = () => {
         shopButton: {
             backgroundColor: colors.primary.main,
             color: colors.primary.contrastText,
+            marginBottom: spacing.xs,
             fontWeight: 600,
-            fontSize: '0.875rem',
             letterSpacing: '1px',
             textTransform: 'uppercase',
             padding: theme.spacing(1.5, 2.5),
             borderRadius: 0,
             border: 'none',
-            minWidth: '160px',
             transition: transitions.hover,
             '&:hover': {
                 backgroundColor: colors.primary.light,

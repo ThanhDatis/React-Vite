@@ -60,13 +60,13 @@ export default function UserShow() {
         { 
             name: 'Twitter', 
             icon: Twitter, 
-            color: '#000000',
+            color: theme.custom.colors.social.twitter,
             href: '#twitter'
         },
         { 
             name: 'YouTube', 
             icon: YouTube,
-            color: '#000000',
+            color: theme.custom.colors.social.youtube,
             href: '#youtube'
         }
     ];
@@ -120,7 +120,7 @@ export default function UserShow() {
                     sx={styles.shopButton}
                     onClick={() => handleShopAction(user.id)}
                 >
-                    SHOP WITH ME
+                    shop with me
                 </Button>
             </CardActions>
         </Card>
