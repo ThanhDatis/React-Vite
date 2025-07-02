@@ -20,9 +20,11 @@ import {
   YouTube,
   Send as SendIcon
 } from '@mui/icons-material';
+import { useTheme } from '@emotion/react';
 
 export default function FooterContent() {
   // Dữ liệu Footer
+  const theme = useTheme();
   const footerData = {
     mainPages: [
       { id: 1, title: "Sell with US" },
@@ -48,19 +50,19 @@ export default function FooterContent() {
         id: 1,
         name: "Facebook",
         icon: <Facebook />,
-        color: "#1877f2"
+        color: theme.custom.colors.social.facebook,
       },
       {
         id: 2,
         name: "Twitter", 
         icon: <Twitter />,
-        color: "#1da1f2"
+        color: theme.custom.colors.social.twitter
       },
       {
         id: 3,
         name: "YouTube",
         icon: <YouTube />,
-        color: "#ff0000"
+        color: theme.custom.colors.social.youtube
       }
     ]
   };

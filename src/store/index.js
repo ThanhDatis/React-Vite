@@ -1,4 +1,4 @@
-// import { CartContext, CartProvider } from "./contexts/CartContext";
-// import { useCart, useCartHelpers } from "./hooks/useCart";
-// import { AuthProvider, useAuth, useAuthHelpers } from "./hooks/useAuth";
-// import { AuthContext } from "./contexts/AuthContext";
+export { CartContext, CartProvider } from "./contexts/CartContext";
+export { AuthContext, AuthProvider } from "./contexts/AuthContext";
+export { useCart, useCartHelpers } from "../hooks/useCart";
+export { useAuth, useAuthHelpers } from "../hooks/useAuth";

@@ -1,5 +1,12 @@
 import { useContext } from 'react';
 import { CartContext } from '../store/contexts/CartContext';
+export const useCart = () => {
+    const context = useContext(CartContext);
+    if (!context) {
+        throw new Error('useCart must be used within a CartProvider');
+    }
+    return context;
+};
 
 export const useCartHelpers = () => {
     const { 
@@ -194,10 +201,4 @@ export const useCartHelpers = () => {
     };
 };
 
-export const useCart = () => {
-    const context = useContext(CartContext);
-    if (!context) {
-        throw new Error('useCart must be used within a CartProvider');
-    }
-    return context;
-}; 
+ 

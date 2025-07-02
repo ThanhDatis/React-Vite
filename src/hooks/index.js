@@ -1,3 +1,3 @@
-export { useCart } from './CartContext';
-export { useAuth } from './AuthContext';
+export { useCart, useCartHelpers } from './useCart';
+export { useAuth, useAuthHelpers } from './useAuth';
 // export { useProducts } from './ProductsContext';
