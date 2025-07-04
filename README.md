@@ -1,12 +1,38 @@
-# React + Vite
+# Hệ thống bán hàng tích hợp gợi ý sản phẩm
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## 📦 Giới thiệu
 
-Currently, two official plugins are available:
+Đây là dự án thực tập tốt nghiệp của tôi với đề tài **"Xây dựng hệ thống bán hàng tích hợp gợi ý sản phẩm"**.
+Hệ thống cho phép người dùng duyệt, tìm kiếm và mua sản phẩm, đồng thời tích hợp tính năng đề xuất sản phẩm dựa trên lịch sử tương tác hoặc dữ liệu liên quan.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## Expanding the ESLint configuration
+## ⚒️ Công nghệ sử dụng
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### Frontend
+
+- [React](https://reactjs.org/) - Thư viện xây dựng giao diện người dùng hiện đại.
+- [Vite](https://vitejs.dev/) - Công cụ build tốc độ cao cho dự án React.
+- [Material UI (MUI)](https://mui.com/) - Bộ UI Component chuẩn Material Design.
+- [Formik](https://formik.org/) - Hỗ trợ quản lý và xử lý form hiệu quả.
+- [Yup](https://github.com/jquense/yup) - Thư viện validate dữ liệu đơn giản, mạnh mẽ.
+- **TypeScript** *(dự kiến triển khai trong các giai đoạn sau)* - Tăng độ an toàn và dễ bảo trì code.
+
+### Backend *(dự kiến)*
+
+- [MongoDB](https://www.mongodb.com/) - Cơ sở dữ liệu NoSQL linh hoạt, dễ tích hợp với ứng dụng web.
+
+---
+
+## 🛠️ Cài đặt & Khởi chạy
+
+```bash
+# Clone project
+git clone https://github.com/ThanhDatis/React-Vite.git
+
+# Cài đặt các package
+cd your-project
+npm install
+
+# Chạy ứng dụng ở chế độ phát triển
+npm run dev
