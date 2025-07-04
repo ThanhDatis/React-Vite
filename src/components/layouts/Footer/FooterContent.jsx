@@ -67,7 +67,6 @@ const FOOTER_DATA = {
   ],
 };
 
-// Component tái sử dung cho danh sach footer
 const FooterList = React.memo(({ title, items }) => (
   <Box>
     <Typography
@@ -191,7 +190,7 @@ const NewLetterSubscription = () => {
         text: "Subscription successful!", 
         type: "success" });
       setEmail('');
-    } catch (error) {
+    } catch {
       setMessage({
         text: "Failed to subscribe. Please try again.",
         type: "error",
@@ -372,3 +371,96 @@ const PaymentIcons = React.memo(() => (
   </Box>
 ));
 
+export default function FooterContent() {
+  const Theme = useTheme();
+
+  return (
+    <Box
+      component="footer"
+      sx={{
+        backgroundColor: 'grey.100',
+        pt: { xs: 4, md: 6 },
+        pb: 2,
+        mt: 'auto',
+      }}
+      role="contentinfo"
+    >
+      <Container maxWidth="lg" sx={{ px: { xs: 2, sm: 3 } }}>
+        <Grid container spacing={{ xs: 3, md: 4 }}>
+          <Grid item xs={12} sm={6} md={3}>
+            <Box>
+              <Typography
+                variant="h5"
+                component="div"
+                sx={{ 
+                  fontWeight: 700,
+                  mb: 2,
+                  textTransform: 'uppercase',
+                  color: 'text.primary',
+                  fontSize: { xs: '16px', md: '18px' }
+                }}
+              >
+                Your logo
+              </Typography>
+              <Typography
+                variant="body2"
+                sx={{
+                  color: 'text.secondary',
+                  mb: 1,
+                  fontSize: { xs: '12px', md: '13px' }
+                }}
+              >
+                Your trusted beauty destination
+              </Typography>
+              <SocialIcons socialLinks={ FOOTER_DATA.socialLinks } />
+            </Box>
+          </Grid>
+
+          <Grid item xs={12} sm={6} md={2}>
+            <FooterList title="Company" items={FOOTER_DATA.mainPages} />
+          </Grid>
+
+          <Grid item xs={12} sm={6} md={2}>
+            <SocialIcons title="Legal" socialLinks={ FOOTER_DATA.policy } />
+          </Grid>
+
+          <Grid item xs={12} sm={6} md={2}>
+            <SocialIcons title="Categories" socialLinks={ FOOTER_DATA.categories } />
+          </Grid>
+
+          <Grid item xs={12} md={3}>
+            <NewLetterSubscription />
+          </Grid>
+        </Grid>
+
+        <Divider sx={{ my: { xs: 3, md: 4 } }} />
+
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            flexDirection: { xs: 'column', sm: 'row' },
+            gap: 2,
+            textAlign: { xs: 'center', sm: 'left' },
+        }}>
+          <Typography
+            variant="body2"
+            sx={{
+              color: 'text.secondary',
+              fontSize: { xs: '11px', md: '12px' },
+            }}
+          >
+            © {new Date().getFullYear()} Your Company. All rights reserved.
+          </Typography>
+
+          <PaymentIcons />
+        </Box>
+      </Container>
+    </Box>
+  );
+}
+
+FooterList.displayName = 'FooterList';
+SocialIcons.displayName = 'SocialIcons';
+PaymentIcons.displayName = 'PaymentIcons';
