@@ -1,4 +1,4 @@
-import React, { useState, useCallback, isValidElement } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import {
   Box,
@@ -18,64 +18,15 @@ import {
   useTheme,
   useMediaQuery,
 } from "@mui/material";
-import {
+import { 
+  Email as EmailIcon,
   Facebook,
   Twitter,
-  YouTube,
-  Send as SendIcon,
-  Email as EmailIcon,
+  YouTube
 } from "@mui/icons-material";
-// import { useTheme } from "@emotion/react";
 
-const FOOTER_DATA = {
-  mainPages: [
-    { id: 1, title: "Sell with US", path: "/sell" },
-    { id: 2, title: "About US", path: "/about" },
-    { id: 3, title: "Contact US", path: "/contact" },
-    { id: 4, title: "Promos", path: "/promos" },
-    { id: 5, title: "Become an Ambassador", path: "/ambassador" },
-  ],
-  policy: [
-    { id: 1, title: "Terms of Usage", path: "/terms" },
-    { id: 2, title: "Privacy Policy", path: "/privacy" },
-    { id: 3, title: "Return Policy", path: "/returns" },
-  ],
-  categories: [
-    { id: 1, title: "Skincare", path: "/skincare" },
-    { id: 2, title: "Makeup", path: "/makeup" },
-    { id: 3, title: "Hair Care", path: "/haircare" },
-    { id: 4, title: "Bath & Body", path: "/bath-body" },
-    { id: 5, title: "Beauty Supplements", path: "/fragrance" },
-  ],
-  socialLinks: [
-    {
-      id: 1,
-      name: "Facebook",
-      icon: <Facebook />,
-      href: "https://www.facebook.com",
-      color: "#1877F2",
-    },
-    {
-      id: 2,
-      name: "Twitter",
-      icon: <Twitter />,
-      href: "https://www.twitter.com",
-      color: "#1DA1F2",
-    },
-    {
-      id: 3,
-      name: "YouTube",
-      icon: <YouTube />,
-      href: "https://www.youtube.com",
-      color: "#FF0000",
-    },
-  ],
-};
-
-const IsValidEmail = (email) => {
-  const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
-  return emailRegex.test(email.trim());
-};
+import { FOOTER_DATA, COMPANY_INFO } from "../../../data/footerData";
+import { useNewsletter } from "../../../hooks/useNewsletter";
 
 const FooterList = React.memo(({ title, items }) => (
   <Box>
@@ -101,7 +52,7 @@ const FooterList = React.memo(({ title, items }) => (
               component={Link}
               to={item.path}
               sx={{
-                color: "text.secondary",
+                color: 'text.secondary',
                 textDecoration: 'none',
                 fontSize: { xs: '13px', md: '14px' },
                 display: 'block',
@@ -130,93 +81,68 @@ const FooterList = React.memo(({ title, items }) => (
 ));
 
 // Component tái sử  cho social icons
-const SocialIcons = React.memo(({ socialLinks }) => (
-  <Box sx={{ display: 'flex', gap: 1, mt: 2 }} role="list">
-    {socialLinks.map(social => (
-      <IconButton
-        key={social.id}
-        component="a"
-        href={social.href}
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label={`Visit our ${social.name} page`}
-        sx={{
-          backgroundColor: social.color,
-          color: 'white',
-          width: { xs: 36, md: 40 },
-          height: { xs: 36, md: 40 },
-          transition: 'all 0.3s ease-in-out',
-          '&:hover': {
-            backgroundColor: social.color,
-            opacity: 0.8,
-            transform: "scale(1.1)",
-          },
-          '&:focus': {
-            outline: '2px solid',
-            outlineColor: 'primary.main',
-            outlineOffset: '2px',
-          },
-        }}
-      >
-        {social.icon}
-      </IconButton>
-    ))}
-  </Box>
-));
+const SocialIcons = React.memo(({ socialLinks }) => {
+
+  const renderIcon = (iconType) => {
+    switch (iconType) {
+      case "facebook":
+        return <Facebook />;
+      case "twitter":
+        return <Twitter />;
+      case "youtube":
+        return <YouTube />;
+      default:
+        return null;
+    }
+  };
+
+  return (
+      <Box sx={{ display: 'flex', gap: 1, mt: 2 }} role="list">
+        {socialLinks.map(social => (
+          <IconButton
+            key={social.id}
+            component="a"
+            href={social.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={`Visit our ${social.name} page`}
+            sx={{
+              backgroundColor: social.color,
+              color: 'white',
+              width: { xs: 36, md: 40 },
+              height: { xs: 36, md: 40 },
+              transition: 'all 0.3s ease-in-out',
+              '&:hover': {
+                backgroundColor: social.color,
+                opacity: 0.8,
+                transform: "scale(1.1)",
+              },
+              '&:focus': {
+                outline: '2px solid',
+                outlineColor: 'primary.main',
+                outlineOffset: '2px',
+              },
+            }}
+          >
+            {renderIcon(social.iconType)}
+          </IconButton>
+        ))}
+      </Box>
+    );
+  });
 
 const NewsletterSubscription = () => {
-  const [email, setEmail] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const [message, setMessage] = useState({ text: "", type: "" });
+  const {
+    email,
+    isLoading,
+    message,
+    handleEmailChange,
+    handleSubmit,
+    isSubmitDisabled
+  } = useNewsletter();
+
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-
-  const handleEmailChange = useCallback((event) => {
-    setEmail(event.target.value);
-    if (message.text) setMessage({ text: '', type: '' });
-  }, [message.text]);
-
-  const handleSubmit = useCallback( async (event) => {
-    event.preventDefault();
-
-    const  trimmedEmail = email.trim();
-
-    if (!trimmedEmail) {
-      setMessage({ 
-        text: "Please enter your email address.", 
-        type: "error" 
-      });
-      return;
-    }
-
-    if (!isValidElement(trimmedEmail)) {
-      setMessage({ 
-        text: "Invalid email address format.", 
-        type: "error" 
-      });
-      return;
-    }
-
-    setIsLoading(true);
-    setMessage({ text: '', type: '' });
-
-    try {
-      // Giả lập gửi email
-      await new Promise(resolve => setTimeout(resolve, 1000));
-
-      setMessage({ 
-        text: "Subscription successful!", 
-        type: "success" });
-      setEmail('');
-    } catch {
-      setMessage({
-        text: "Failed to subscribe. Please try again.",
-        type: "error",
-      });
-    } finally {
-      setIsLoading(false);
-    }
-  }, [email]);
   
   return (
     <Box>
@@ -232,7 +158,7 @@ const NewsletterSubscription = () => {
           letterSpacing: 0.5,
         }}
       >
-        Subscribe to our Newsletter
+        Subscribe to Newsletter
       </Typography>
       
       <Typography
@@ -285,10 +211,9 @@ const NewsletterSubscription = () => {
         />
         
         <Button
-          // component="button"
           type="submit"
           variant="contained"
-          disabled={isLoading || !email.trim() || !IsValidEmail(email.trim())}
+          disabled={isSubmitDisabled}
           startIcon={isLoading ? <CircularProgress size={16} color="inherit" /> : <EmailIcon />}
           sx={{
             minWidth: { xs: '100%', md: '140px' },
@@ -329,7 +254,7 @@ const NewsletterSubscription = () => {
 
 const PaymentIcons = React.memo(() => (
   <Box
-    sx={{ display : 'flex', gap: 1 }} role="img" aria-label="Payment icons"
+    sx={{ display : 'flex', gap: 1 }} role="img" aria-label="Accepted payment methods"
   >
     <Paper
       elevation={1}
