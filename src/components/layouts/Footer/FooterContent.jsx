@@ -13,20 +13,23 @@ import {
   ListItemText,
   Divider,
   Paper,
-  CircularProgress,
   Alert,
+  CircularProgress,
+  useTheme,
+  useMediaQuery,
 } from "@mui/material";
 import {
   Facebook,
   Twitter,
   YouTube,
   Send as SendIcon,
+  Email as EmailIcon,
 } from "@mui/icons-material";
-import { useTheme } from "@emotion/react";
+// import { useTheme } from "@emotion/react";
 
 const FOOTER_DATA = {
   mainPages: [
-    { id: 1, title: "Sell with US", path: "/sell-with-us" },
+    { id: 1, title: "Sell with US", path: "/sell" },
     { id: 2, title: "About US", path: "/about" },
     { id: 3, title: "Contact US", path: "/contact" },
     { id: 4, title: "Promos", path: "/promos" },
@@ -50,21 +53,28 @@ const FOOTER_DATA = {
       name: "Facebook",
       icon: <Facebook />,
       href: "https://www.facebook.com",
-      color: theme.custom.colors.social.facebook,
+      color: "#1877F2",
     },
     {
       id: 2,
       name: "Twitter",
       icon: <Twitter />,
-      color: theme.custom.colors.social.twitter,
+      href: "https://www.twitter.com",
+      color: "#1DA1F2",
     },
     {
       id: 3,
       name: "YouTube",
       icon: <YouTube />,
-      color: theme.custom.colors.social.youtube,
+      href: "https://www.youtube.com",
+      color: "#FF0000",
     },
   ],
+};
+
+const IsValidEmail = (email) => {
+  const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
+  return emailRegex.test(email.trim());
 };
 
 const FooterList = React.memo(({ title, items }) => (
@@ -83,29 +93,29 @@ const FooterList = React.memo(({ title, items }) => (
     >
       {title}
     </Typography>
-    <List sx={{ p: 0 }} role="List">
+    <List sx={{ p: 0 }} role="list">
       {items.map((item) => (
-        <ListItem key={item.id} sx={{ p: 0, mb: 0.5 }} role="ListItem">
+        <ListItem key={item.id} sx={{ p: 0, mb: 0.5 }} role="listitem">
           <ListItemText>
             <Typography
               component={Link}
               to={item.path}
               sx={{
                 color: "text.secondary",
-                textDecoration: "none",
-                fontSize: { xs: "13px", md: "14px" },
-                display: "block",
+                textDecoration: 'none',
+                fontSize: { xs: '13px', md: '14px' },
+                display: 'block',
                 py: 0.5,
                 transition: "all 0.2s ease-in-out",
-                "&:hover": {
+                '&:hover': {
                   color: "text.primary",
                   textDecoration: "underline",
                   pl: 0.5,
                 },
-                "&:focus": {
-                  outline: "2px solid",
-                  outlineColor: "primary.main",
-                  outlineOffset: "2px",
+                '&:focus': {
+                  outline: '2px solid',
+                  outlineColor: 'primary.main',
+                  outlineOffset: '2px',
                   borderRadius: 1,
                 },
               }}
@@ -119,10 +129,10 @@ const FooterList = React.memo(({ title, items }) => (
   </Box>
 ));
 
-// Component tái sử dụng cho social icons
+// Component tái sử  cho social icons
 const SocialIcons = React.memo(({ socialLinks }) => (
-  <Box sx={{ display: "flex", gap: 1, mt: 2 }} role="List">
-    {socialLinks.map((social) => (
+  <Box sx={{ display: 'flex', gap: 1, mt: 2 }} role="list">
+    {socialLinks.map(social => (
       <IconButton
         key={social.id}
         component="a"
@@ -132,19 +142,19 @@ const SocialIcons = React.memo(({ socialLinks }) => (
         aria-label={`Visit our ${social.name} page`}
         sx={{
           backgroundColor: social.color,
-          color: "white",
-          width: { xs: 30, md: 35 },
-          height: { xs: 30, md: 35 },
-          transition: "all 0.2s ease-in-out",
-          "&:hover": {
+          color: 'white',
+          width: { xs: 36, md: 40 },
+          height: { xs: 36, md: 40 },
+          transition: 'all 0.3s ease-in-out',
+          '&:hover': {
             backgroundColor: social.color,
             opacity: 0.8,
             transform: "scale(1.1)",
           },
-          "&:focus": {
-            outline: "2px solid",
-            outlineColor: "primary.main",
-            outlineOffset: "2px",
+          '&:focus': {
+            outline: '2px solid',
+            outlineColor: 'primary.main',
+            outlineOffset: '2px',
           },
         }}
       >
@@ -154,28 +164,36 @@ const SocialIcons = React.memo(({ socialLinks }) => (
   </Box>
 ));
 
-const NewLetterSubscription = () => {
-  const [email, setEmail] = useState("");
-  const theme = useTheme();
+const NewsletterSubscription = () => {
+  const [email, setEmail] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState({ text: "", type: "" });
+  const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   const handleEmailChange = useCallback((event) => {
     setEmail(event.target.value);
-    if (message.text) setMessage({ text: "", type: "" });
+    if (message.text) setMessage({ text: '', type: '' });
   }, [message.text]);
 
   const handleSubmit = useCallback( async (event) => {
     event.preventDefault();
 
-    if (!email.trim()) {
-      setMessage({ text: "Please enter your email address.", type: "error" });
+    const  trimmedEmail = email.trim();
+
+    if (!trimmedEmail) {
+      setMessage({ 
+        text: "Please enter your email address.", 
+        type: "error" 
+      });
       return;
     }
 
-    if (isValidElement(email)) {
-      setMessage({ text: "Invalid email address format.", type: "error" });
+    if (!isValidElement(trimmedEmail)) {
+      setMessage({ 
+        text: "Invalid email address format.", 
+        type: "error" 
+      });
       return;
     }
 
@@ -184,7 +202,7 @@ const NewLetterSubscription = () => {
 
     try {
       // Giả lập gửi email
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      await new Promise(resolve => setTimeout(resolve, 1000));
 
       setMessage({ 
         text: "Subscription successful!", 
@@ -242,7 +260,7 @@ const NewLetterSubscription = () => {
       >
         <TextField
           type="email"
-          placeholder="Enter your email"
+          placeholder="Enter your email address"
           value={email}
           onChange={handleEmailChange}
           variant="outlined"
@@ -250,19 +268,19 @@ const NewLetterSubscription = () => {
           fullWidth={isMobile}
           disabled={isLoading}
           inputProps={{
-            "aria-label": "Email address for newsletter subscription",
-            "aria-describedby": message.text ? "subscription-message" : undefined,
+            'aria-label': 'Email address for newsletter subscription',
+            'aria-describedby': message.text ? 'subscription-message' : undefined,
           }}
           sx={{
             flex: 1,
-            maxWidth: { md: 200 },
-            "& .MuiOutlinedInput-root": {
-              backgroundColor: "background.paper",
+            maxWidth: { md: '200px' },
+            '& .MuiOutlinedInput-root': {
+              backgroundColor: 'background.paper',
               fontSize: '14px',
-              "&:hover .MuiOutlinedInput-notchedOutline": {
+              '&:hover .MuiOutlinedInput-notchedOutline': {
                 borderColor: 'primary.main',
               },
-            },
+            }
           }}
         />
         
@@ -270,7 +288,7 @@ const NewLetterSubscription = () => {
           // component="button"
           type="submit"
           variant="contained"
-          disabled={isLoading || !email.trim()}
+          disabled={isLoading || !email.trim() || !IsValidEmail(email.trim())}
           startIcon={isLoading ? <CircularProgress size={16} color="inherit" /> : <EmailIcon />}
           sx={{
             minWidth: { xs: '100%', md: '140px' },
@@ -292,18 +310,18 @@ const NewLetterSubscription = () => {
   
       {message.text && (
         <Alert
-        severity={message.type}
-        id="subscription-message"
-        sx={{
-          mt: 1,
-          fontSize: '12px',
-          '& .MuiAlert-message': {
-            fontSize: 'inherit',
-          }
-        }}
-      >
-        {message.text}
-      </Alert>
+          severity={message.type}
+          id="subscription-message"
+          sx={{
+            mt: 1,
+            fontSize: '12px',
+            '& .MuiAlert-message': {
+              fontSize: 'inherit',
+            }
+          }}
+        >
+          {message.text}
+        </Alert>
       )}
     </Box>
   );
@@ -421,15 +439,15 @@ export default function FooterContent() {
           </Grid>
 
           <Grid item xs={12} sm={6} md={2}>
-            <SocialIcons title="Legal" socialLinks={ FOOTER_DATA.policy } />
+            <FooterList title="Legal" items={ FOOTER_DATA.policy } />
           </Grid>
 
           <Grid item xs={12} sm={6} md={2}>
-            <SocialIcons title="Categories" socialLinks={ FOOTER_DATA.categories } />
+            <FooterList title="Categories" items={ FOOTER_DATA.categories } />
           </Grid>
 
           <Grid item xs={12} md={3}>
-            <NewLetterSubscription />
+            <NewsletterSubscription />
           </Grid>
         </Grid>
 
