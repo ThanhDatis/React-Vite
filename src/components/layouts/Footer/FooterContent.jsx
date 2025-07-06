@@ -84,6 +84,8 @@ const FooterList = React.memo(({ title, items }) => (
 const SocialIcons = React.memo(({ socialLinks }) => {
 
   const renderIcon = (iconType) => {
+    // const normalizedType = iconType?.toLowerCase().trim();
+
     switch (iconType) {
       case "facebook":
         return <Facebook />;
@@ -92,6 +94,7 @@ const SocialIcons = React.memo(({ socialLinks }) => {
       case "youtube":
         return <YouTube />;
       default:
+        console.warn(`Unknown social icon type:, "${iconType}"`);
         return null;
     }
   };
@@ -253,9 +256,8 @@ const NewsletterSubscription = () => {
 };
 
 const PaymentIcons = React.memo(() => (
-  <Box
-    sx={{ display : 'flex', gap: 1 }} role="img" aria-label="Accepted payment methods"
-  >
+  <Box sx={{ display: 'flex', gap: 1 }} role="img" aria-label="Accepted payment methods">
+    {/* Mastercard */}
     <Paper
       elevation={1}
       sx={{
@@ -266,7 +268,7 @@ const PaymentIcons = React.memo(() => (
         width: { xs: 40, md: 45 },
         height: { xs: 25, md: 30 },
         borderRadius: 1,
-        backgroundColor: 'background.paper',
+        backgroundColor: 'background.paper'
       }}
     >
       <Box
@@ -285,9 +287,10 @@ const PaymentIcons = React.memo(() => (
       </Box>
     </Paper>
 
-    <Paper 
+    {/* Visa */}
+    <Paper
       elevation={1}
-      sx={{ 
+      sx={{
         p: 0.5,
         display: 'flex',
         alignItems: 'center',
@@ -343,7 +346,7 @@ export default function FooterContent() {
                   fontSize: { xs: '16px', md: '18px' }
                 }}
               >
-                Your logo
+                {COMPANY_INFO.logo}
               </Typography>
               <Typography
                 variant="body2"
@@ -353,7 +356,7 @@ export default function FooterContent() {
                   fontSize: { xs: '12px', md: '13px' }
                 }}
               >
-                Your trusted beauty destination
+                {COMPANY_INFO.tagLine}
               </Typography>
               <SocialIcons socialLinks={ FOOTER_DATA.socialLinks } />
             </Box>
@@ -394,10 +397,14 @@ export default function FooterContent() {
               fontSize: { xs: '11px', md: '12px' },
             }}
           >
-            © {new Date().getFullYear()} Your Company. All rights reserved.
+            © {new Date().getFullYear()} {COMPANY_INFO.name}. All rights reserved.
           </Typography>
 
-          <PaymentIcons />
+          <PaymentIcons 
+            types={['mastercard', 'visa']}
+            size='medium'
+            containerSx={{ justifyContent: { xs: 'center', sm: 'flex-end' } }}
+          />
         </Box>
       </Container>
     </Box>
