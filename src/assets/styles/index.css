@@ -30,7 +30,7 @@
   box-sizing: border-box;
 }
 body {
-  overflow-x: hidden;  /* Ngăn thanh cuộn ngang */
+  overflow-x: hidden;
   margin: 0;
   padding: 0;
   font-family: sans-serif;

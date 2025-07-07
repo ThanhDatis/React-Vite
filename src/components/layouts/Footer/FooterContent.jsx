@@ -276,14 +276,16 @@ const PaymentIcons = React.memo(() => (
         width="30"
         height="18"
         viewBox="0 0 35 22"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
         aria-label="Mastercard"
       >
-        <circle cx="13" cy="11" r="8" fill="#EB001B"/>
-        <circle cx="22" cy="11" r="8" fill="#F79E1B"/>
-        <path
-          d="M17.5 5c2 1.9 3.2 4.5 3.2 7.5s-1.2 5.6-3.2 7.5c-2-1.9-3.2-4.5-3.2-7.5S15.5 6.9 17.5 5z"
-          fill="#FF5F00"
-        />
+        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="10" cy="16" r="9" fill="#E80B26"/>
+        <circle cx="22" cy="16" r="9" fill="#F59D31"/>
+        <path d="M16 22.7083C17.8413 21.0603 19 18.6655 19 16C19 13.3345 17.8413 10.9397 16 9.29175C14.1587 10.9397 13 13.3345 13 16C13 18.6655 14.1587 21.0603 16 22.7083Z" fill="#FC6020"/>
+        </svg>
+
       </Box>
     </Paper>
 
@@ -306,6 +308,8 @@ const PaymentIcons = React.memo(() => (
         width="28"
         height="16"
         viewBox="0 0 32 20"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
         aria-label="Visa"
       >
         <path
