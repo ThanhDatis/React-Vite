@@ -1,5 +1,7 @@
 import { useState } from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import { useScrollToTop } from './hooks/useScrollToTop'
+
 import { ThemeProvider } from '@mui/material/styles'
 import { CssBaseline } from '@mui/material'
 import { CartProvider } from './store/contexts/CartContext'
@@ -23,6 +25,13 @@ import UserAccount from './pages/Account/UserAccountContent'
 import CategoryFactory from './pages/CategoryPage/CategoryFactory'
 
 function AppContent() {
+  useScrollToTop({
+    behavior: 'smooth',
+    excludePaths: ['/cart', '/checkout', '/account'],
+    delay: 100,
+    offset: 0
+  });
+
   const [currentSlide, setCurrentSlide] = useState(0)
   
   return (

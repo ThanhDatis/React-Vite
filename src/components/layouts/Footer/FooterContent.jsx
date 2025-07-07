@@ -25,6 +25,8 @@ import {
   YouTube
 } from "@mui/icons-material";
 
+import { SubscribeButton } from "../../common";
+
 import { FOOTER_DATA, COMPANY_INFO } from "../../../data/footerData";
 import { useNewsletter } from "../../../hooks/useNewsletter";
 
@@ -100,7 +102,7 @@ const SocialIcons = React.memo(({ socialLinks }) => {
   };
 
   return (
-      <Box sx={{ display: 'flex', gap: 1, mt: 2 }} role="list">
+      <Box sx={{ display: 'flex', gap: 2, mt: 2 }} role="list">
         {socialLinks.map(social => (
           <IconButton
             key={social.id}
@@ -213,27 +215,14 @@ const NewsletterSubscription = () => {
           }}
         />
         
-        <Button
+        <SubscribeButton
           type="submit"
           variant="contained"
           disabled={isSubmitDisabled}
           startIcon={isLoading ? <CircularProgress size={16} color="inherit" /> : <EmailIcon />}
-          sx={{
-            minWidth: { xs: '100%', md: '140px' },
-            backgroundColor: 'primary.main',
-            color: 'primary.contrastText',
-            fontWeight: 'bold',
-            textTransform: 'none',
-            '&:hover': {
-              backgroundColor: 'primary.dark',
-            },
-            '&:disabled': {
-              backgroundColor: 'action.disabledBackground'
-            }
-          }}
         >
           {isLoading ? 'Loading...' : 'Subscribe'}
-        </Button>
+        </SubscribeButton>
       </Box>
   
       {message.text && (
