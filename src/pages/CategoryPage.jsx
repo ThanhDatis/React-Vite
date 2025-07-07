@@ -78,7 +78,9 @@ const PaginationContainer = styled(Box)(({ theme }) => ({
   flexWrap: "wrap",
 }));
 
-const PaginationButton = styled(Button)(({ theme, active }) => ({
+const PaginationButton = styled(Button, {
+  shouldForwardProp: (prop) => prop !== "active",
+})(({ theme, active }) => ({
   borderRadius: theme.spacing(1),
   minWidth: 32, minHeight: 32,
   fontWeight: active ? 600 : 400,
