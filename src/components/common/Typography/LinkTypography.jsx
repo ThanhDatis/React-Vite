@@ -12,16 +12,16 @@ export const LinkTypography = styled(Link)(({ theme }) => ({
         fontSize: '13px',
     },
 
-    '&.hover': {
+    '&:hover': {
         color: theme.palette.text.primary,
         textDecoration: 'underline',
         paddingLeft: theme.spacing(0.5)
     },
 
-    '&.focus': {
-        outline: '2px solid',
-        outlineColor: theme.palette.primary.main,
-        outlineOffset: '2px',
-        BorderRadius: theme.spacing(0.5)
-    },
+    // '&:focus': {
+    //     outline: '2px solid',
+    //     outlineColor: theme.palette.primary.main,
+    //     outlineOffset: '2px',
+    //     BorderRadius: theme.spacing(0.5)
+    // },
 }));
