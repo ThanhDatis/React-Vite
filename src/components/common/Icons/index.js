@@ -1,6 +1,1 @@
-export { default as PaymentIcon } from './PaymentIcon';
-export const Icons = {
-    // eslint-disable-next-line no-undef
-    PaymentIcon: require('./PaymentIcon').default,
-};
-export * from './PaymentIcon';
+export { default as PaymentIcon, PaymentIconGroup } from './PaymentIcon';
