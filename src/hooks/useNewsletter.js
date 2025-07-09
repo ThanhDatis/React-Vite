@@ -6,9 +6,12 @@ import { EMAIL_REGEX, NEWSLETTER_MESSAGES } from "../data/footerData";
  * @returns {object} - An object containing the newsletter subscription state and functions
  */
 export const useNewsletter = () => {
-    const [email, setEmail] = useState("");
+    const [email, setEmail] = useState('');
+    const [emailError, setEmailError] = useState('');
+    const [showEmailError, setShowEmailError] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [message, setMessage] = useState({ type: '', text: ''});
+    const [hasInteracted, setHasInteracted] = useState(false);
     
     /**
      * Validates email format
@@ -20,43 +23,106 @@ export const useNewsletter = () => {
     }, []);
 
     /**
+     * Validates email and sets error message
+     * @param {string} emailValue - The email to validate
+     * @returns {string} - Error message if invalid, empty string if valid
+     */
+    const getEmailError = useCallback((emailValue) => {
+        const trimmedEmail = emailValue.trim();
+
+        if (!trimmedEmail && hasInteracted) {
+            return NEWSLETTER_MESSAGES.emailRequired;
+        }
+        if (trimmedEmail && !isValidEmail(trimmedEmail)) {
+            return NEWSLETTER_MESSAGES.emailInvalid;
+        }
+        return '';
+    }, [isValidEmail, hasInteracted]);
+
+    /**
      * handles email input changes
      * @param {Event} event - input change event
      */
     const handleEmailChange = useCallback((event) => {
         const newEmail = event.target.value;
         setEmail(newEmail);
+        setHasInteracted(true);
+
+        const error = getEmailError(newEmail)
+        setEmailError(error);
+        setShowEmailError(true);
 
         if (message.text) {
             setMessage({ type: '', text: '' });
         }
-    }, [message.text]);
+    }, [message.text, getEmailError]);
 
     /**
-     * Validates email and shows appropriate error message
+     * Handles email field focus
+     */
+    const handleEmailFocus = useCallback(() => {
+        setHasInteracted(true);
+        if (!email.trim()) {
+            setEmailError(NEWSLETTER_MESSAGES.emailRequired);
+            setShowEmailError(true);
+        }
+    }, [email]);
+
+    /**
+     * Handles email field blur
+     */
+    const handleEmailBlur = useCallback(() => {
+        const error = getEmailError(email);
+        setEmailError(error);
+        setShowEmailError(Boolean(error));
+    }, [getEmailError, email]);
+
+    /**
+     * Validates email for submission
      * @param {string} email - The email to be validated
      * @returns {boolean} - True if the email is valid, false otherwise
      */
-    const validateEmail = useCallback((email) => {
+    const validateEmailForSubmit = useCallback((email) => {
         const trimmedEmail = email.trim();
 
         if (!trimmedEmail) {
-            setMessage({
-                type: "error",
-                text: NEWSLETTER_MESSAGES.emailRequired,
-            });
+            setEmailError(NEWSLETTER_MESSAGES.emailRequired);
+            setShowEmailError(true);
             return false;
         }
-
+        
         if (!isValidEmail(trimmedEmail)) {
-            setMessage({
-                type: "error",
-                text: NEWSLETTER_MESSAGES.emailInvalid,
-            });
+            setEmailError(NEWSLETTER_MESSAGES.emailInvalid);
+            setShowEmailError(true);
             return false;
         }
         return true;
     }, [isValidEmail]);
+    // /**
+    //  * Validates email and shows appropriate error message
+    //  * @param {string} email - The email to be validated
+    //  * @returns {boolean} - True if the email is valid, false otherwise
+    //  */
+    // const validateEmail = useCallback((email) => {
+    //     const trimmedEmail = email.trim();
+
+    //     if (!trimmedEmail) {
+    //         setMessage({
+    //             type: "error",
+    //             text: NEWSLETTER_MESSAGES.emailRequired,
+    //         });
+    //         return false;
+    //     }
+
+    //     if (!isValidEmail(trimmedEmail)) {
+    //         setMessage({
+    //             type: "error",
+    //             text: NEWSLETTER_MESSAGES.emailInvalid,
+    //         });
+    //         return false;
+    //     }
+    //     return true;
+    // }, [isValidEmail]);
 
     /**
      * Simulates API call for newsletter subscription
@@ -86,15 +152,18 @@ export const useNewsletter = () => {
      */
     const handleSubmit = useCallback(async (event) => {
         event.preventDefault();
+        setHasInteracted(true);
 
         const trimmedEmail = email.trim();
 
-        if (!validateEmail(email)) {
+        if (!validateEmailForSubmit(email)) {
             return;
         }
 
         setIsLoading(true);
         setMessage({ type: '', text: ''});
+        setEmailError('');
+        setShowEmailError(false);
 
         try {
             await subscribeToNewsletter(trimmedEmail);
@@ -104,6 +173,7 @@ export const useNewsletter = () => {
                 text: NEWSLETTER_MESSAGES.success
             });
             setEmail('');
+            setHasInteracted(false);
         } catch (error) {
             let errorMessage = NEWSLETTER_MESSAGES.subscriptionFailed;
 
@@ -117,18 +187,21 @@ export const useNewsletter = () => {
         } finally {
             setIsLoading(false);
         }
-    }, [email, validateEmail, subscribeToNewsletter]);
+    }, [email, validateEmailForSubmit, subscribeToNewsletter]);
 
     /**
      * Resets the newsletter form state
      */
     const resetForm = useCallback(() => {
         setEmail('');
+        setEmailError('');
+        setShowEmailError(false);
         setMessage({ type: '', text: '' });
         setIsLoading(false);
+        setHasInteracted(false);
     }, []);
     /**
-     * checks if the submit button shouldd be disabled
+     * checks if the submit button should be disabled
      * @returns {boolean} - true if the submit button should be disabled
      */
 
@@ -139,11 +212,15 @@ export const useNewsletter = () => {
 
     return {
         email,
+        emailError,
+        showEmailError,
         isLoading,
         message,
 
         //handles
         handleEmailChange,
+        handleEmailBlur,
+        handleEmailFocus,
         handleSubmit,
         resetForm,
 
@@ -152,6 +229,8 @@ export const useNewsletter = () => {
         isSubmitDisabled: isSubmitDisabled(),
 
         setEmail,
+        setEmailError,
+        setShowEmailError,
         setIsLoading,
         setMessage
     };
