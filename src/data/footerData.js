@@ -51,11 +51,11 @@ export const COMPANY_INFO = {
 };
 
 export const NEWSLETTER_MESSAGES = {
-    success: 'Successfully subscribed to our newsletter.',
     emailRequired: 'Please enter your email address.',
     emailInvalid: 'Please enter a valid email address (e.g., example@example.com)',
+    success: 'Successfully subscribed to our newsletter.',
     subscriptionFailed: 'Failed to subscribe. Please try again letter',
     alreadySubscribed: 'This email is already subscribed.',
-}
+};
 
 export const EMAIL_REGEX = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
