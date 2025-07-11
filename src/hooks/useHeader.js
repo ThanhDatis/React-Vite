@@ -158,6 +158,12 @@ export const useHeader = () => {
             handleSearch,
             handleSearchChange,
         },
+        setters: {
+            setUsername,
+            setPassword,
+            setError,
+            setSearchValue,
+        },
         utils: {
             resetLoginForm,
             closeAllMenus,
