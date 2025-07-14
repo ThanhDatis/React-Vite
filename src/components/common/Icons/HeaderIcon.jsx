@@ -137,10 +137,10 @@ import { Link } from 'react-router-dom';
 
  export const Separator = ({
     width = 1,
-    height = 1,
-    color = 'primary',
+    height = 24,
+    color = '#333333',
     opacity = 0.8,
-    my = 0,
+    // my = 0,
     mx = 0,
     orientation = 'vertical',
  }) => {
@@ -149,11 +149,11 @@ import { Link } from 'react-router-dom';
             component= "span"
             sx={{
                 display: 'block',
-                width: orientation === 'vertical' ? width : '100%',
-                height: orientation === 'vertical' ? height : width,
+                width: orientation === 'vertical' ? width : width,
+                height: orientation === 'vertical' ? height : height,
                 backgroundColor: color,
                 opacity: opacity,
-                my: my,
+                // my: my,
                 mx: mx,
                 flexShrink: 0,
             }}
