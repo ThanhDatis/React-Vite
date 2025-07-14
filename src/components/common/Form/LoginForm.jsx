@@ -26,7 +26,7 @@ import { Facebook, Google } from '@mui/icons-material';
 const loginSchema = Yup.object().shape({
     username: Yup.string()
         .min(3, 'Username must be at least 3 characters')
-        .max(50, 'Password must be at least 50 characters')
+        .max(50, 'Username must be at most 50 characters')
         .required('Username is required'),
     password: Yup.string()
         .min(6, 'Password must be at least 6 characters')
@@ -59,9 +59,14 @@ export const LoginForm = ({
         setShowPassword(!showForgotPassword);
     };
     return (
-        <Box sx={{ p: 3, width: '100%', maxWidth: 400 }}>
-            <Typography
-                variant="h6"
+        <Box sx={{ 
+            p: 3, 
+            width: '100%', 
+            maxWidth: 400, 
+            boxShadow: 2,
+            backgroundColor: 'white',
+            }}>
+            <Typography variant="h6"
                 sx={{
                     mb: 3,
                     textAlign: 'center',
@@ -198,7 +203,7 @@ export const LoginForm = ({
                             fullWidth
                             variant='contained'
                             loading={isLoading || isSubmitting}
-                            sx={{ mb: 2 }}
+                            sx={{ mb: 1 }}
                         >
                             Sign in
                         </SubmitButtonWithLoading>
