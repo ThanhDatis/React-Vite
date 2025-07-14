@@ -1,38 +1,38 @@
-# Hệ thống bán hàng tích hợp gợi ý sản phẩm
+# Build an integrated sales system with product recommendations
 
-## 📦 Giới thiệu
+## 📦 Introduction
 
-Đây là dự án thực tập tốt nghiệp của tôi với đề tài **"Xây dựng hệ thống bán hàng tích hợp gợi ý sản phẩm"**.
-Hệ thống cho phép người dùng duyệt, tìm kiếm và mua sản phẩm, đồng thời tích hợp tính năng đề xuất sản phẩm dựa trên lịch sử tương tác hoặc dữ liệu liên quan.
+This is my graduation internship project with the topic **"Building an integrated sales system with product suggestions"**. The system allows users to browse, search, and purchase products, while also integrating a feature for recommending products based on interaction history or relevant data.
 
 ---
 
-## ⚒️ Công nghệ sử dụng
+## ⚒️ TECHNOLOGY USED
 
 ### Frontend
 
-- [React](https://reactjs.org/) - Thư viện xây dựng giao diện người dùng hiện đại.
-- [Vite](https://vitejs.dev/) - Công cụ build tốc độ cao cho dự án React.
-- [Material UI (MUI)](https://mui.com/) - Bộ UI Component chuẩn Material Design.
-- [Formik](https://formik.org/) - Hỗ trợ quản lý và xử lý form hiệu quả.
-- [Yup](https://github.com/jquense/yup) - Thư viện validate dữ liệu đơn giản, mạnh mẽ.
-- **TypeScript** *(dự kiến triển khai trong các giai đoạn sau)* - Tăng độ an toàn và dễ bảo trì code.
+- [React](https://reactjs.org/) - A modern library for building user interfaces.
+- [Vite](https://vitejs.dev/) - A fast build tool optimized for React projects.
+- [Material UI (MUI)](https://mui.com/) - A UI component library based on Material Design.
+- [Formik](https://formik.org/) - Helps manage and handle forms effectively.
+- [Yup](https://github.com/jquense/yup) - A simple and powerful schema-based validation library.
+- **TypeScript** *(planned for future implementation) – Enhances code safety and maintainability.
 
-### Backend *(dự kiến)*
+### Backend *(planned)*
 
-- [MongoDB](https://www.mongodb.com/) - Cơ sở dữ liệu NoSQL linh hoạt, dễ tích hợp với ứng dụng web.
+- [MongoDB](https://www.mongodb.com/) - A flexible NoSQL database that integrates well with web applications.
 
----
+### Features
+- 
 
-## 🛠️ Cài đặt & Khởi chạy
+## 🛠️ Installation & Development
 
 ```bash
-# Clone project
+# Clone the project
 git clone https://github.com/ThanhDatis/React-Vite.git
 
-# Cài đặt các package
+# Install dependencies 
 cd your-project
 npm install
 
-# Chạy ứng dụng ở chế độ phát triển
+# Run the development server
 npm run dev
