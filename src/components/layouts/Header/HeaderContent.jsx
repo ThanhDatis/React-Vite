@@ -20,7 +20,6 @@ import {
   Fade,
   InputBase,
   styled,
-  alpha,
   Drawer,
   List,
   ListItemIcon,
@@ -52,48 +51,49 @@ import {
   HeaderIconGroup,
 } from '../../common/Icons';
 
+import { SearchBar } from '../../../shared';
 import { LoginForm } from '../../common/Form';
 import { useHeader } from '../../../hooks/useHeader';
 import { HEADER_DATA } from '../../../data/headerData';
 
 // ==================== STYLED COMPONENTS ====================
-const Search = styled('div')(({ theme }) => ({
-  position: 'relative',
-  borderRadius: theme.shape.borderRadius,
-  backgroundColor: alpha(theme.palette.common.white, 0.15),
-  '&:hover': { backgroundColor: alpha(theme.palette.common.white, 0.25) },
-  marginRight: theme.spacing(2),
-  marginLeft: 0,
-  width: '100%',
-  [theme.breakpoints.up('sm')]: {
-    marginLeft: theme.spacing(3),
-    width: 'auto',
-  },
-}));
+// const Search = styled('div')(({ theme }) => ({
+//   position: 'relative',
+//   borderRadius: theme.shape.borderRadius,
+//   backgroundColor: alpha(theme.palette.common.white, 0.15),
+//   '&:hover': { backgroundColor: alpha(theme.palette.common.white, 0.25) },
+//   marginRight: theme.spacing(2),
+//   marginLeft: 0,
+//   width: '100%',
+//   [theme.breakpoints.up('sm')]: {
+//     marginLeft: theme.spacing(3),
+//     width: 'auto',
+//   },
+// }));
 
-const SearchIconWrapper = styled('div')(({ theme }) => ({
-  padding: theme.spacing(0, 2),
-  height: '100%',
-  position: 'absolute',
-  pointerEvents: 'none',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-}));
+// const SearchIconWrapper = styled('div')(({ theme }) => ({
+//   padding: theme.spacing(0, 2),
+//   height: '100%',
+//   position: 'absolute',
+//   pointerEvents: 'none',
+//   display: 'flex',
+//   alignItems: 'center',
+//   justifyContent: 'center',
+// }));
 
-const StyledInputBase = styled(InputBase)(({ theme }) => ({
-  color: 'inherit',
-  width: '100%',
-  '& .MuiInputBase-input': {
-    padding: theme.spacing(1, 1, 1, 0),
-    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-    transition: theme.transitions.create('width'),
-    width: '100%',
-    [theme.breakpoints.up('md')]: {
-      width: '20ch',
-    },
-  },
-}));
+// const StyledInputBase = styled(InputBase)(({ theme }) => ({
+//   color: 'inherit',
+//   width: '100%',
+//   '& .MuiInputBase-input': {
+//     padding: theme.spacing(1, 1, 1, 0),
+//     paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+//     transition: theme.transitions.create('width'),
+//     width: '100%',
+//     [theme.breakpoints.up('md')]: {
+//       width: '20ch',
+//     },
+//   },
+// }));
 
 const StyledToolbar = styled(Box)(() => ({
   padding: '0 !important',
@@ -136,25 +136,25 @@ const LogoComponent = React.memo(() => (
 LogoComponent.displayName = 'LogoComponent';
 
 // Search Component - Desktop only
-const SearchComponent = React.memo(({ searchValue, onSearchChange, onSearch }) => (
-  <Search>
-    <SearchIconWrapper>
-      <SearchIcon />
-    </SearchIconWrapper>
-    <StyledInputBase
-      placeholder="Search"
-      inputProps={{ 'aria-label': 'search' }}
-      value={searchValue}
-      onChange={(e) => onSearchChange(e.target.value)}
-      onKeyDown={(e) => {
-        if (e.key === 'Enter') {
-          onSearch(e);
-        }
-      }}
-    />
-  </Search>
-));
-SearchComponent.displayName = 'SearchComponent';
+// const SearchComponent = React.memo(({ searchValue, onSearchChange, onSearch }) => (
+//   <Search>
+//     <SearchIconWrapper>
+//       <SearchIcon />
+//     </SearchIconWrapper>
+//     <StyledInputBase
+//       placeholder="Search"
+//       inputProps={{ 'aria-label': 'search' }}
+//       value={searchValue}
+//       onChange={(e) => onSearchChange(e.target.value)}
+//       onKeyDown={(e) => {
+//         if (e.key === 'Enter') {
+//           onSearch(e);
+//         }
+//       }}
+//     />
+//   </Search>
+// ));
+// SearchComponent.displayName = 'SearchComponent';
 
 // User Menu Content - Desktop
 const UserMenuContent = React.memo(
@@ -290,10 +290,10 @@ const HeaderContent = () => {
         <Container maxWidth="xl">
           <StyledToolbar>
             <LogoComponent />
-            <SearchComponent
-              searchValue={states.searchValue}
-              onSearchChange={handles.handleSearchChange}
+            <SearchBar
               onSearch={handles.handleSearch}
+              recentSearches={states.recentSearches}
+              showSuggestions
             />
             <Box sx={{ flexGrow: 1 }} />
 
