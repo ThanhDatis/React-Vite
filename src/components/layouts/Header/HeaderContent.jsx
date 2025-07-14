@@ -30,13 +30,9 @@ import {
   Collapse,
   useTheme,
   useMediaQuery,
-  CircularProgress,
-
 } from '@mui/material';
-import {
-  ShoppingCart,
-  Person,
-  Language,
+
+import {  
   Facebook,
   Google,
   AccountCircle,
@@ -47,6 +43,16 @@ import {
   ExpandMore,
   ExpandLess,
 } from '@mui/icons-material';
+
+import { 
+  CartIcon,
+  UserIcon,
+  LanguageIcon,
+  Separator, 
+  HeaderIconGroup,
+} from '../../common/Icons';
+
+import { LoginForm } from '../../common/Form';
 import { useHeader } from '../../../hooks/useHeader';
 import { HEADER_DATA } from '../../../data/headerData';
 
@@ -150,188 +156,6 @@ const SearchComponent = React.memo(({ searchValue, onSearchChange, onSearch }) =
 ));
 SearchComponent.displayName = 'SearchComponent';
 
-// Cart Button - Desktop only
-const CartButton = React.memo(() => (
-  <IconButton
-    component={Link}
-    to="/cart"
-    sx={{
-      display: 'flex',
-      gap: 1,
-      alignItems: 'center',
-      color: '#333333',
-      padding: '8px',
-      '&:hover': { backgroundColor: 'rgba(0, 0, 0, 0.04)' },
-    }}
-  >
-    <ShoppingCart />
-    <Typography variant="caption" sx={{ fontSize: '16px', fontWeight: 600 }}>
-      Cart
-    </Typography>
-  </IconButton>
-));
-CartButton.displayName = 'CartButton';
-
-// Language Button - Desktop only
-const LanguageButton = React.memo(() => (
-  <IconButton
-    sx={{
-      display: 'flex',
-      gap: 1,
-      alignItems: 'center',
-      color: '#333333',
-      padding: '8px',
-      '&:hover': { backgroundColor: 'rgba(0, 0, 0, 0.04)' },
-    }}
-  >
-    <Language />
-    <Typography variant="caption" sx={{ fontSize: '16px', fontWeight: 600 }}>
-      Lang
-    </Typography>
-  </IconButton>
-));
-LanguageButton.displayName = 'LanguageButton';
-
-// Separator Component
-const Separator = React.memo(({ width = '1px' }) => (
-  <Box
-    component="span"
-    sx={{
-      display: 'block',
-      width: width,
-      height: '24px',
-      backgroundColor: '#333333',
-      opacity: 0.8,
-      mx: 0,
-    }}
-  />
-));
-Separator.displayName = 'Separator';
-
-// Login Form Component - Shared between desktop and mobile
-const LoginForm = React.memo(
-  ({ username, setUsername, password, setPassword, error, handleLogin, onClose }) => (
-    <Box sx={{ p: 3, width: '100%' }}>
-      <Typography
-        variant="h6"
-        sx={{ mb: 2, textAlign: 'center', fontWeight: 'bold' }}
-      >
-        SIGN IN
-      </Typography>
-
-      {error && (
-        <Alert severity="error" sx={{ mb: 2 }}>
-          {error}
-        </Alert>
-      )}
-
-      <Box component="form" onSubmit={handleLogin}>
-        <TextField
-          fullWidth
-          label="Username"
-          placeholder="Enter Username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          sx={{ mb: 2 }}
-          size="small"
-        />
-
-        <TextField
-          fullWidth
-          type="password"
-          label="Password"
-          placeholder="Enter Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          sx={{ mb: 1 }}
-          size="small"
-        />
-
-        <Box sx={{ textAlign: 'right', mb: 2 }}>
-          <Button
-            component={Link}
-            to="/forgot-password"
-            size="small"
-            sx={{ textTransform: 'none', fontSize: '12px' }}
-            onClick={onClose}
-          >
-            Forgot Password?
-          </Button>
-        </Box>
-
-        <Button
-          type="submit"
-          fullWidth
-          variant="contained"
-          sx={{
-            mb: 2,
-            backgroundColor: '#333333',
-            '&:hover': { backgroundColor: '#555555' },
-          }}
-        >
-          SIGN IN
-        </Button>
-
-        <Box sx={{ textAlign: 'center', mb: 2 }}>
-          <Typography variant="body2" color="text.secondary">
-            OR
-          </Typography>
-        </Box>
-
-        <Button
-          fullWidth
-          variant="outlined"
-          startIcon={<Facebook />}
-          sx={{
-            mb: 1,
-            color: '#1877f2',
-            borderColor: '#1877f2',
-            textTransform: 'none',
-            '&:hover': {
-              backgroundColor: 'rgba(24, 119, 242, 0.04)',
-              borderColor: '#1877f2',
-            },
-          }}
-        >
-          Login with Facebook
-        </Button>
-
-        <Button
-          fullWidth
-          variant="outlined"
-          startIcon={<Google />}
-          sx={{
-            mb: 2,
-            color: '#db4437',
-            borderColor: '#db4437',
-            textTransform: 'none',
-            '&:hover': {
-              backgroundColor: 'rgba(219, 68, 55, 0.04)',
-              borderColor: '#db4437',
-            },
-          }}
-        >
-          Login with Google +
-        </Button>
-
-        <Typography variant="body2" sx={{ textAlign: 'center' }}>
-          New Member?{' '}
-          <Button
-            component={Link}
-            to="/registration"
-            size="small"
-            sx={{ textTransform: 'none', p: 0, minWidth: 'unset' }}
-            onClick={onClose}
-          >
-            Register Now
-          </Button>
-        </Typography>
-      </Box>
-    </Box>
-  )
-);
-LoginForm.displayName = 'LoginForm';
-
 // User Menu Content - Desktop
 const UserMenuContent = React.memo(
   ({
@@ -417,127 +241,6 @@ const HeaderContent = () => {
   } = useHeader();
 
   const { brands, navItems, Colors } = HEADER_DATA;
-  // State management
-  // const [mobileDrawerOpen, setMobileDrawerOpen] = useState(false);
-  // const [showLoginForm, setShowLoginForm] = useState(false);
-  // const [username, setUsername] = useState('');
-  // const [password, setPassword] = useState('');
-  // const [error, setError] = useState('');
-  // const [userMenuAnchor, setUserMenuAnchor] = useState(null);
-  // const [brandsMenuAnchor, setBrandsMenuAnchor] = useState(null);
-  // const [brandMenuOpen, setBrandMenuOpen] = useState(false);
-  // const [searchValue, setSearchValue] = useState('');
-
-  // Data
-  // const brands = ['Adidas', 'Apple', 'Bose', 'Canon', 'Dell', 'Dyson'];
-  // const navItems = [
-  //   { label: 'SKINCARE', path: '/skincare' },
-  //   { label: 'MAKE UP', path: '/makeup' },
-  //   { label: 'HAIRCARE', path: '/haircare' },
-  //   { label: 'BATH & BODY', path: '/bath-body' },
-  //   { label: 'BEAUTY SUPPLEMENTS', path: '/fragrance' },
-  //   { label: 'PROMOS', path: '/promos' },
-  // ];
-
-  // Computed values
-  // const isUserMenuOpen = Boolean(userMenuAnchor);
-  // const isBrandsMenuOpen = Boolean(brandsMenuAnchor);
-  // const userDisplayName = useMemo(() => {
-  //   return currentUser ? currentUser.fullName : 'User';
-  // }, [currentUser]);
-
-  // Handlers
-  // const handleLogin = async (e) => {
-  //   e.preventDefault();
-  //   setError('');
-
-  //   const success = await login(username, password);
-  //   if (success) {
-  //     resetLoginForm();
-  //     closeAllMenus();
-  //   } else {
-  //     setError('Invalid username or password');
-  //   }
-  // };
-
-  // const handleLogout = () => {
-  //   logout();
-  //   closeAllMenus();
-  // };
-
-  // const handleUserMenuToggle = (event) => {
-  //   if (isMobile) {
-  //     setShowLoginForm(!showLoginForm);
-  //   } else {
-  //     setUserMenuAnchor(userMenuAnchor ? null : event.currentTarget);
-  //     setShowLoginForm(!showLoginForm);
-  //   }
-  // };
-
-  // const handleBrandsMenuOpen = (event) => {
-  //   setBrandsMenuAnchor(event.currentTarget);
-  // };
-
-  // const handleBrandsMenuClose = () => {
-  //   setBrandsMenuAnchor(null);
-  // };
-
-  // const handleBrandMenuToggle = () => {
-  //   setBrandMenuOpen(!brandMenuOpen);
-  // };
-
-  // const handleMobileDrawerToggle = () => {
-  //   setMobileDrawerOpen(!mobileDrawerOpen);
-  //   if (isMobile) {
-  //     setShowLoginForm(false);
-  //     setError('');
-  //   }
-  // };
-
-  // const handleAccountClick = () => {
-  //   navigate('/user-account');
-  //   closeAllMenus();
-  // };
-
-  // const handleCartClick = () => {
-  //   navigate('/cart');
-  //   closeAllMenus();
-  // };
-
-  // const handleSearch = (e) => {
-  //   e.preventDefault();
-  //   if (searchValue.trim()) {
-  //     console.log('Searching for:', searchValue);
-  //     closeAllMenus();
-  //   }
-  // };
-
-  // const handleSearchChange = (value) => {
-  //   setSearchValue(value);
-  // };
-
-  // const handleBrandClick = useCallback(
-  //   (brand) => {
-  //     console.log('Navigate to brand:', brand);
-  //     handleBrandsMenuClose();
-  //   },
-  //   [handleBrandsMenuClose]
-  // );
-
-  // const resetLoginForm = () => {
-  //   setShowLoginForm(false);
-  //   setUsername('');
-  //   setPassword('');
-  //   setError('');
-  // };
-
-  // const closeAllMenus = () => {
-  //   setShowLoginForm(false);
-  //   setUserMenuAnchor(null);
-  //   setBrandsMenuAnchor(null);
-  //   setMobileDrawerOpen(false);
-  //   setError('');
-  // };
 
   // Memoized styles
   const menuButtonSx = useMemo(
@@ -595,89 +298,37 @@ const HeaderContent = () => {
             <Box sx={{ flexGrow: 1 }} />
 
             {/* Desktop Menu Icons */}
-            <Box
-              sx={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: 2,
-                paddingRight: '70px',
-              }}
-            >
-              <CartButton />
-              <Separator />
-
-              {/* User Icon with Dropdown */}
-              <Box>
-                <IconButton
-                  onClick={handles.handleUserMenuToggle}
-                  sx={{
-                    display: 'flex',
-                    gap: 1,
-                    alignItems: 'center',
-                    color: '#333333',
-                    padding: '8px',
-                    '&:hover': { backgroundColor: 'rgba(0, 0, 0, 0.04)' },
-                  }}
-                >
-                  <Person />
-                  <Typography
-                    variant="caption"
-                    sx={{ fontSize: '16px', fontWeight: 600 }}
-                  >
-                    {utils.userDisplayName}
-                  </Typography>
-                </IconButton>
-
-                <Popper
-                  open={computed.isUserMenuOpen}
-                  anchorEl={states.userMenuAnchor}
-                  placement="bottom-end"
-                  transition
-                  sx={{ zIndex: 1300 }}
-                >
-                  {({ TransitionProps }) => (
-                    <Fade {...TransitionProps} timeout={500}>
-                      <Paper
-                        sx={{
-                          mt: 1,
-                          minWidth: 300,
-                          maxWidth: 400,
-                          boxShadow: 3,
-                          border: '1px solid #e0e0e0',
-                        }}
-                      >
-                        <ClickAwayListener onClickAway={utils.closeAllMenus}>
-                          <Box>
-                            <UserMenuContent
-                              currentUser={states.currentUser}
-                              username={states.username}
-                              setUsername={setters.setUsername}
-                              password={states.password}
-                              setPassword={setters.setPassword}
-                              error={states.error}
-                              handleLogin={handles.handleLogin}
-                              handleAccountClick={handles.handleAccountClick}
-                              handleLogout={handles.handleLogout}
-                              onClose={utils.closeAllMenus}
-                            />
-                          </Box>
-                        </ClickAwayListener>
-                      </Paper>
-                    </Fade>
-                  )}
-                </Popper>
-              </Box>
-
+            <HeaderIconGroup sx={{ paddingRight: '70px', }}>
+              <CartIcon 
+                cartCount={states.cartCount}
+                onClick={handles.handleCartClick}
+              />
+              <Separator width='2px' />              
+              <UserIcon
+                username={computed.userDisplayName}
+                isLoggedIn={!!states.currentUser}
+                onClick={handles.handleUserMenuToggle}
+                sx={{
+                  display: 'flex',
+                  gap: 1,
+                  alignItems: 'center',
+                  color: '#333333',
+                  padding: '8px',
+                  '&:hover': { backgroundColor: 'rgba(0, 0, 0, 0.04)' },
+                }}
+              />
               <Separator width="2px" />
-              <LanguageButton />
-            </Box>
+              <LanguageIcon 
+                currentLang='EN'
+                onClick={handles.handleLanguageClick}
+              />
+            </HeaderIconGroup>
           </StyledToolbar>
         </Container>
       </Box>
 
       {/* Desktop Navigation Bar */}
-      <AppBar
-        position="static"
+      <AppBar position="static"
         sx={{
           backgroundColor: 'white',
           boxShadow: 'none',
@@ -974,11 +625,34 @@ const HeaderContent = () => {
       </>
     );
   };
-
-  // ==================== RENDER ====================
+const renderUserMenu = () => (
+    <Popper 
+    open={computed.isUserMenuOpen} 
+    anchorEl={states.userMenuAnchor}
+    placement="bottom-start"
+    >
+      {!states.currentUser ? (
+        <LoginForm 
+          onSubmit={async (values) => {
+            const success = await handles.handleLogin(values);
+            if (success) {
+              setters.setError('Invalid credentials');
+            }
+          }}
+          error={states.error}
+          onClose={utils.closeAllMenus}
+          isLoading={states.isLoading}
+          onSocialLogin={handles.handleSocialLogin}
+        />
+        ) : (
+          <UserMenu />
+      )}
+      </Popper>
+  );
   return (
     <header className="header">
       {isMobile ? renderMobileHeader() : renderDesktopHeader()}
+      {renderUserMenu()}
     </header>
   );
 };
