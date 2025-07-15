@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import { Link } from 'react-router-dom';
@@ -9,25 +9,27 @@ import {
     Button,
     Divider,
     IconButton,
-    InputAdornment
+    InputAdornment,
+    FormControlLabel,
+    Checkbox,
+    Collapse
 } from '@mui/material';
 import {
     Visibility, 
     VisibilityOff,
     Person,
-    Lock
+    Lock,
+    Facebook,
+    Google
 } from '@mui/icons-material';
 import { ValidatedTextField } from './ValidatedTextField';
 import { SubmitButtonWithLoading } from '../Button/SubmitButton';
 import { SocialButton } from '../Button/SocialButton';
-import { Facebook, Google } from '@mui/icons-material';
-
 
 const loginSchema = Yup.object().shape({
     username: Yup.string()
-        .min(3, 'Username must be at least 3 characters')
-        .max(50, 'Username must be at most 50 characters')
-        .required('Username is required'),
+        .min(3, 'Please enter a valid email address')
+        .required('Email is required'),
     password: Yup.string()
         .min(6, 'Password must be at least 6 characters')
         .required('Password is required'),
@@ -53,20 +55,108 @@ export const LoginForm = ({
     showRegisterLink = true,
     showRememberMe = true
 }) => {
-    const [showPassword, setShowPassword] = React.useState(false);
+    const [showPassword, setShowPassword] = useState(false);
+    // const [showAdvancedOptions, setShowAdvancedOptions] = useState(false);
 
-    const handleTogglePassword = () => {
-        setShowPassword(!showForgotPassword);
-    };
+    const handleTogglePassword = useCallback(() => {
+        setShowPassword(prev => !prev);
+    }, []);
+
+    // const handleToggleAdvanced = useCallback(() => {
+    //     setShowAdvancedOptions(prev => !prev);
+    // }, []);
+
+    const handleSocialLogin = useCallback((provider) => {
+        onSocialLogin?.(provider);
+    }, [onSocialLogin]);
+
+    const initialValues = useMemo(() => ({
+        email: '',
+        password: '',
+        rememberMe: false,
+    }), []);
+
+    const socialLoginButtons = useMemo(() => {
+        if (!showSocialLogin) return null;
+
+        return (
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+                <Button 
+                    fullWidth
+                    variant='outlined'
+                    startIcon={
+                        <SocialButton
+                            bgColor="#1877f2"
+                            size='small'
+                            sx={{ width: 24, height: 24 }}
+                        >
+                            <Facebook sx={{ fontSize: 16}}/>
+                        </SocialButton>
+                    }
+                    sx={{
+                        color: '#1877f2',
+                        borderColor: '#1877f2',
+                        textTransform: 'none',
+                        justifyContent: 'flex-start',
+                        pl: 2,
+                        '&:hover': {
+                            backgroundColor: 'rgba(24, 119, 242, 0.04)',
+                            borderColor: '#1877f2',
+                        },
+                    }}
+                    onClick={() => handleSocialLogin('facebook')}
+                    aria-label="Login with Facebook"
+                >
+                    Login with Facebook
+                </Button>
+
+                <Button
+                    fullWidth
+                    variant="outlined"
+                    startIcon={
+                        <SocialButton 
+                            bgColor="#db4437" 
+                            size="small"
+                            sx={{ width: 24, height: 24 }}
+                        >
+                            <Google sx={{ fontSize: 16 }} />
+                        </SocialButton>
+                    }
+                    sx={{
+                        color: '#db4437',
+                        borderColor: '#db4437',
+                        textTransform: 'none',
+                        justifyContent: 'flex-start',
+                        pl: 2,
+                        '&:hover': {
+                            backgroundColor: 'rgba(219, 68, 55, 0.04)',
+                            borderColor: '#db4437',
+                        },
+                    }}
+                    onClick={() => handleSocialLogin('google')}
+                    aria-label="Login with Google"
+                >
+                    Login with Google
+                </Button>
+            </Box>
+        );
+    }, [showSocialLogin, handleSocialLogin]);
+
     return (
-        <Box sx={{ 
+        <Box 
+            component="form"
+            sx={{ 
             p: 3, 
             width: '100%', 
             maxWidth: 400, 
             boxShadow: 2,
             backgroundColor: 'white',
-            }}>
-            <Typography variant="h6"
+            }}
+            role='dialog'
+            aria-labelledby='login-title'
+            aria-describedby='login-description'
+        >
+            <Typography id="login-title" variant="h6"
                 sx={{
                     mb: 3,
                     textAlign: 'center',
@@ -83,17 +173,14 @@ export const LoginForm = ({
                 severity="error"
                 sx={{ mb: 2 }}
                 onClose={() => {}}
+                role='alert'
             >
                 {error}
                 </Alert>
             )}
 
             <Formik
-                initialValues={{
-                    email: '',
-                    password: '',
-                    rememberMe: false,
-                }}
+                initialValues={initialValues}
                 validationSchema={loginSchema}
                 onSubmit={onSubmit}
             >
@@ -105,15 +192,17 @@ export const LoginForm = ({
                     handleBlur,
                     isSubmitting,
                 }) => (
-                    <Form>
+                    <Form noValidate>
                         <ValidatedTextField 
                             fullWidth
-                            name="username"
-                            placeholder="Enter Username"
-                            value={values.username}
+                            name="email"
+                            type="email"
+                            placeholder="Enter your email"
+                            value={values.email}
                             onChange={handleChange}
                             onBlur={handleBlur}
-                            error={!!errors.username && touched.username}
+                            error={errors.email}
+                            showError={touched.email}
                             sx={{ mb: 2 }}
                             InputProps={{
                                 startAdornment: (
@@ -122,17 +211,22 @@ export const LoginForm = ({
                                     </InputAdornment>
                                 ),
                             }}
+                            inputProps={{
+                                'aria-label': 'Email address',
+                                'aria-describedby': errors.email && touched.email ? 'email-error': undefined,
+                            }}
                         />
 
                         <ValidatedTextField 
                             fullWidth
                             type={showPassword ? 'text' : 'password'}
                             name="password"
-                            placeholder="Enter Password"
+                            placeholder="Enter your password"
                             value={values.password}
                             onChange={handleChange}
                             onBlur={handleBlur}
-                            error={!!errors.password && touched.password}
+                            error={errors.password}
+                            showError={touched.password}
                             sx={{ mb: 1 }}
                             InputProps={{
                                 startAdornment: (
@@ -146,11 +240,16 @@ export const LoginForm = ({
                                             onClick={handleTogglePassword}
                                             edge="end"
                                             size="small"
+                                            aria-label={showPassword ? 'Hide password' : 'Show password'}
                                         >
                                             {showPassword ? <VisibilityOff /> : <Visibility />}
                                         </IconButton>
                                     </InputAdornment>
                                 )
+                            }}
+                            inputProps={{
+                                'aria-label': 'Password',
+                                'aria-describedby': errors.password && touched.password ? 'password-error': undefined,
                             }}
                         />
 
@@ -163,18 +262,21 @@ export const LoginForm = ({
                             }}
                         >
                             {showRememberMe && (
-                                <label>
-                                    <input 
-                                        type='checkbox'
-                                        name="rememberMe"
-                                        checked={values.rememberMe}
-                                        onChange={handleChange}
-                                        style={{ marginRight: 8 }}
-                                    />
-                                    <Typography variant='body2' component='span'>
+                                <FormControlLabel 
+                                    control={
+                                        <Checkbox
+                                            name="rememberMe"
+                                            checked={values.rememberMe}
+                                            onChange={handleChange}
+                                            size="small"
+                                        />
+                                    }                                
+                                    label={
+                                        <Typography variant='body2'>
                                         Remember me
-                                    </Typography>
-                                </label>
+                                        </Typography>
+                                    }
+                                />
                             )}
 
                             {showForgotPassword && (
@@ -204,6 +306,7 @@ export const LoginForm = ({
                             variant='contained'
                             loading={isLoading || isSubmitting}
                             sx={{ mb: 1 }}
+                            disabled={isLoading || isSubmitting}
                         >
                             Sign in
                         </SubmitButtonWithLoading>
@@ -215,64 +318,7 @@ export const LoginForm = ({
                                         Or sign in with
                                     </Typography>
                                 </Divider>
-
-                                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-                                    <Button 
-                                        fullWidth
-                                        variant='outlined'
-                                        startIcon={
-                                            <SocialButton
-                                                bgColor="#1877f2"
-                                                size='small'
-                                                sx={{ width: 24, height: 24 }}
-                                            >
-                                                <Facebook sx={{ fontSize: 16}}/>
-                                            </SocialButton>
-                                        }
-                                        sx={{
-                                            color: '#1877f2',
-                                            borderColor: '#1877f2',
-                                            textTransform: 'none',
-                                            justifyContent: 'flex-start',
-                                            pl: 2,
-                                            '&:hover': {
-                                                backgroundColor: 'rgba(24, 119, 242, 0.04)',
-                                                borderColor: '#1877f2',
-                                            },
-                                        }}
-                                        onClick={() => onSocialLogin?.('facebook')}
-                                    >
-                                        Login with Facebook
-                                    </Button>
-
-                                    <Button
-                                        fullWidth
-                                        variant="outlined"
-                                        startIcon={
-                                            <SocialButton 
-                                                bgColor="#db4437" 
-                                                size="small"
-                                                sx={{ width: 24, height: 24 }}
-                                            >
-                                                <Google sx={{ fontSize: 16 }} />
-                                            </SocialButton>
-                                        }
-                                        sx={{
-                                            color: '#db4437',
-                                            borderColor: '#db4437',
-                                            textTransform: 'none',
-                                            justifyContent: 'flex-start',
-                                            pl: 2,
-                                            '&:hover': {
-                                                backgroundColor: 'rgba(219, 68, 55, 0.04)',
-                                                borderColor: '#db4437',
-                                            },
-                                        }}
-                                        onClick={() => onSocialLogin?.('google')}
-                                    >
-                                        Login with Google
-                                    </Button>
-                                </Box>
+                                {socialLoginButtons}
                             </>
                         )}
 

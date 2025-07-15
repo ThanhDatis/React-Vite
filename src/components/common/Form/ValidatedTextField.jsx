@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Tooltip, alpha, styled, TextField } from '@mui/material';
 
 const StyledTextField = styled(TextField)(({ theme }) => ({
@@ -18,6 +18,16 @@ const StyledTextField = styled(TextField)(({ theme }) => ({
             borderColor: theme.palette.error.main,
         },
     },
+
+    '&.MuiInputLabel-root': {
+        fontSize: '14px',
+        '&.Mui-focused': {
+            color: theme.palette.primary.main,
+        },
+        '&.Mui-error': {
+            color: theme.palette.error.main,
+        },
+    }
 }));
 
 const ErrorTooltip = styled(({ className, ...props }) => (
@@ -31,6 +41,7 @@ const ErrorTooltip = styled(({ className, ...props }) => (
         borderRadius: '4px',
         fontWeight: 400,
         maxWidth: 220,
+        boxShadow: theme.shadows[4],
 
         '& .MuiTooltip-arrow': {
             color: alpha(theme.palette.error.main, 0.9),
@@ -71,39 +82,37 @@ export const ValidatedTextField = ({
     fullWidth = false,
     variant = 'outlined',
     tooltipPlacement = 'top',
+    name,
+    label,
+    helperText,
+    autoComplete,
     ...otherProps
 }) => {
     const [isFocused, setIsFocused] = useState(false);
     const [tooltipOpen, setTooltipOpen] = useState(false);
 
-    const handleFocus = (e) => {
+    const handleFocus = useCallback((e) => {
         setIsFocused(true);
         if (error & showError) {
             setTooltipOpen(true);
         }
-        if (onFocus) {
-            onFocus(e);
-        }
-    };
+        onFocus?.(e);
+    }, [error, showError, onFocus]);
 
-    const handleBlur = (e) => {
+    const handleBlur = useCallback((e) => {
         setIsFocused(false);
         setTooltipOpen(false);
-        if (onBlur) {
-            onBlur(e);
-        }
-    };
+        onBlur?.(e);
+    }, [onBlur]);
 
-    const handleChange = (e) => {
+    const handleChange = useCallback((e) => {
         if (error & showError & e.target.value) {
-            setTooltipOpen(true);
+            setTooltipOpen(false);
         }
-        if (onChange) {
-            onChange(e);
-        }
-    };
+        onChange?.(e);
+    }, [onChange, error, showError]);
 
-    React.useEffect(() => {
+    useEffect(() => {
         if (tooltipOpen && error) {
             const timer = setTimeout(() => {
                 setTooltipOpen(false);
@@ -112,20 +121,32 @@ export const ValidatedTextField = ({
         }
     }, [tooltipOpen, error]);
 
-    React.useEffect(() => {
+    useEffect(() => {
         if (error & showError & isFocused) {
             setTooltipOpen (true);
+        } else if (!error) {
+            setTooltipOpen(false);
         }
     }, [error, isFocused, showError]);
+
+    const hasError = useMemo(() => Boolean(error) && showError, [error, showError]);
+    const shouldShowTooltip = useMemo(() =>
+        tooltipOpen && Boolean(error) && showError,
+        [tooltipOpen, error, showError]);
 
     return (
         <ErrorTooltip 
             title={error || ''}
-            open={tooltipOpen && Boolean(error) && showError}
+            open={shouldShowTooltip}
             placement={tooltipPlacement}
             arrow
+            disableHoverListener
+            disableFocusListener
+            disableTouchListener
         >
-            <StyledTextField 
+            <StyledTextField
+                name={name}
+                label={label} 
                 value={value}
                 onChange={handleChange}
                 onFocus={handleFocus}
@@ -133,13 +154,16 @@ export const ValidatedTextField = ({
                 placeholder={placeholder}
                 type={type}
                 disabled={disabled}
-                error={Boolean(error) && showError}
+                error={hasError}
+                helperText={!showError && hasError ? error : helperText}
                 size={size}
                 fullWidth={fullWidth}
                 variant={variant}
+                autoComplete={autoComplete}
                 inputProps={{
                     ...inputProps,
                     'aria-describedby': error && showError ? 'email-error' : undefined, 
+                    'aria-invalid': hasError,
                 }}
                 sx={sx}
                 {...otherProps}
