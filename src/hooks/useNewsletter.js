@@ -98,42 +98,12 @@ export const useNewsletter = () => {
         }
         return true;
     }, [isValidEmail]);
-    // /**
-    //  * Validates email and shows appropriate error message
-    //  * @param {string} email - The email to be validated
-    //  * @returns {boolean} - True if the email is valid, false otherwise
-    //  */
-    // const validateEmail = useCallback((email) => {
-    //     const trimmedEmail = email.trim();
-
-    //     if (!trimmedEmail) {
-    //         setMessage({
-    //             type: "error",
-    //             text: NEWSLETTER_MESSAGES.emailRequired,
-    //         });
-    //         return false;
-    //     }
-
-    //     if (!isValidEmail(trimmedEmail)) {
-    //         setMessage({
-    //             type: "error",
-    //             text: NEWSLETTER_MESSAGES.emailInvalid,
-    //         });
-    //         return false;
-    //     }
-    //     return true;
-    // }, [isValidEmail]);
-
     /**
      * Simulates API call for newsletter subscription
      * @param {string} email - The email to be subscribed
      * @returns {Promise} - A promise that resolves with the result of the API call
      */
     const subscribeToNewsletter = useCallback(async () => {
-        // if (!validateEmail(email)) {
-        //     return false;
-        // }
-        // Simulate API call
         await new Promise((resolve) => setTimeout(resolve, 1500));
 
         const random = Math.random();
@@ -217,14 +187,12 @@ export const useNewsletter = () => {
         isLoading,
         message,
 
-        //handles
         handleEmailChange,
         handleEmailBlur,
         handleEmailFocus,
         handleSubmit,
         resetForm,
 
-        //utilities
         isValidEmail,
         isSubmitDisabled: isSubmitDisabled(),
 

@@ -3,7 +3,6 @@ import image from '../assets/images/image.png'
 import UserShow from './UserShow'
 
 export default function HomePage() {
-  // Tạo mảng dữ liệu sản phẩm để tái sử dụng
   const products = [
     {
       title: "Product Title Goes Here",
@@ -35,7 +34,6 @@ export default function HomePage() {
     }
   ];
 
-  // Tạo component sản phẩm để tái sử dụng
   const ProductCard = ({ product }) => (
     <div className="productItemCard">
       <div className="productImage">
@@ -55,7 +53,6 @@ export default function HomePage() {
     </div>
   );
 
-  // Component tái sử dụng cho section sản phẩm 4 cột
   const ProductSection = ({ title, bannerDiscount, bannerText }) => (
     <section className="sectionProductShowCase">
       <div className="sectionProductHeader">
@@ -67,13 +64,11 @@ export default function HomePage() {
           gridTemplateColumns: 'repeat(4, 1fr)',
           width: '100%'
         }}>
-          {/* Map qua mảng sản phẩm để tạo tất cả các sản phẩm cùng một lúc */}
           {products.map((product, index) => (
             <ProductCard key={index} product={product} />
           ))}
         </div>
 
-        {/* Banner */}
         <div className="sectionBanner">
           <div className="bannerImageContainer">
             <img src={image} alt="Banner" />
@@ -106,12 +101,10 @@ export default function HomePage() {
                       </button>
                   </div>
                   <div className="sectionGridItem">
-                      {/* Tái sử dụng component với 2 phần tử đầu tiên của mảng */}
                       <ProductCard product={products[0]} />
                       <ProductCard product={products[1]} />
                   </div>
                   <div className="sectionGridItem">
-                      {/* Tái sử dụng component với 2 phần tử tiếp theo của mảng */}
                       <ProductCard product={products[2]} />
                       <ProductCard product={products[3]} />
                   </div>
@@ -125,14 +118,12 @@ export default function HomePage() {
           </div>
       </section>
 
-      {/* Sử dụng component ProductSection */}
       <ProductSection 
         title="NEW ARRIVALS" 
         bannerDiscount="50% OFF" 
         bannerText="On All Items" 
       />
 
-      {/* Sử dụng lại component ProductSection với nội dung khác */}
       <ProductSection 
         title="TOP SELLERS" 
         bannerDiscount="35% OFF" 

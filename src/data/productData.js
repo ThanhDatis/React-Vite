@@ -15,7 +15,6 @@ const generateProducts = (count, category) => {
   }));
 };
 
-// Product data for different categories
 export const productData = {
   skincare: generateProducts(48, "skincare"),
   makeup: generateProducts(36, "makeup"),
@@ -25,7 +24,6 @@ export const productData = {
   // Add more categories as needed
 };
 
-// Category information
 export const categories = [
   {
     id: 'skincare',
