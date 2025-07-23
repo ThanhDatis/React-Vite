@@ -1,6 +1,4 @@
- 
-// src/components/layouts/Header/components/Shared/NavigationItems.jsx
-import React, { useState } from 'react';
+ import React, { useState, useCallback, useMemo } from 'react';
 import {
     Button,
     Menu,
@@ -13,24 +11,52 @@ import {
     styled,
     alpha,
     Chip,
+    CircularProgress
 } from '@mui/material';
 import { ExpandMore, Search as SearchIcon } from '@mui/icons-material';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 
 // ==================== STYLED COMPONENTS ====================
+
+const NAVIGATION_THEME = {
+    colors: {
+        primary: '#333333',
+        hover: 'rgba(0, 0, 0, 0.04)',
+        primaryAlpha: (alpha) => `rgba(51, 51, 51, ${alpha})`,
+        text: {
+            primary: '#333333',
+            secondary: '#666666',
+            disabled: '#999999'
+        }
+    },
+    spacing: {
+        xs: 4,
+        sm: 8,
+        md: 16,
+        lg: 24,
+    },
+    transitions: {
+        fast: '0.2s ease',
+        medium: '0.3s ease',
+        slow: '0.4s ease',
+    },
+    breakpoints: {
+        mobile: 'md'
+    }
+};
 const StyledNavButton = styled(Button)(({ theme }) => ({
-    color: '#333333',
+    color: NAVIGATION_THEME.colors.primary,
     fontWeight: 'bold',
     fontSize: '16px',
-    padding: '8px 16px',
+    padding: `${NAVIGATION_THEME.spacing.sm} ${NAVIGATION_THEME.spacing.md}`,
     textTransform: 'uppercase',
     position: 'relative',
     overflow: 'hidden',
     borderRadius: 0,
-    transition: 'all 0.3s ease',
+    transition: `all ${NAVIGATION_THEME.transitions.medium}`,
     
     '&:hover': {
-        backgroundColor: 'rgba(0, 0, 0, 0.04)',
+        backgroundColor: NAVIGATION_THEME.colors.hover,
     },
     
     '&::after': {
@@ -40,7 +66,7 @@ const StyledNavButton = styled(Button)(({ theme }) => ({
         left: '50%',
         width: 0,
         height: '2px',
-        backgroundColor: '#333333',
+        backgroundColor: NAVIGATION_THEME,
         transform: 'translateX(-50%)',
         transformOrigin: 'center',
         transition: 'width 0.3s ease-in-out',
@@ -51,7 +77,7 @@ const StyledNavButton = styled(Button)(({ theme }) => ({
     },
     
     '&.active::after': {
-        width: '100%',
+        // width: '100%',
         backgroundColor: theme.palette.primary.main,
     },
     
@@ -68,18 +94,27 @@ const StyledMenu = styled(Menu)(({ theme }) => ({
         maxHeight: 400,
         boxShadow: '0 4px 20px rgba(0, 0, 0, 0.1)',
         borderRadius: theme.spacing(1),
+        border: `1px solid ${alpha(theme.palette.divider, 0.2)}`,
     },
 }));
 
 const SearchField = styled(TextField)(({ theme }) => ({
     '& .MuiOutlinedInput-root': {
         backgroundColor: alpha(theme.palette.common.black, 0.03),
+        borderRadius: theme.spacing(1),
+        transition: 'all 0.2s ease',
         '&:hover': {
             backgroundColor: alpha(theme.palette.common.black, 0.05),
         },
         '&.Mui-focused': {
             backgroundColor: 'transparent',
+            '& .MuiOutlinedInput-notchedOutline': {
+                borderColor: theme.palette.primary.main,
+            },
         },
+    },
+    '& .MuiInputBase-input': {
+        fontSize: '14px',
     },
 }));
 
@@ -102,6 +137,9 @@ const BrandMenuItem = styled(MenuItem)(({ theme }) => ({
 
 const BrandGroup = styled(Box)(({ theme }) => ({
     padding: theme.spacing(1, 0),
+    '&:not(:last-child)': {
+        borderBottom: `1px solid ${alpha(theme.palette.divider, 0.1)}`,
+    },
 }));
 
 const GroupTitle = styled(Typography)(({ theme }) => ({
@@ -111,6 +149,9 @@ const GroupTitle = styled(Typography)(({ theme }) => ({
     textTransform: 'uppercase',
     padding: theme.spacing(1, 2),
     letterSpacing: '0.5px',
+    backgroundColor: alpha(theme.palette.grey[100], 0.5),
+    margin: theme.spacing(0, 1),
+    borderRadius: theme.spacing(0.5)
 }));
 
 // ==================== NAVIGATION ITEM COMPONENT ====================
@@ -120,20 +161,61 @@ const GroupTitle = styled(Typography)(({ theme }) => ({
  * @param {boolean} isActive - Whether the item is currently active
  * @param {function} onClick - Click handler
  */
-export const NavigationItem = ({ item, isActive = false, onClick }) => {
+export const NavigationItem = React.memo(({ 
+    item, 
+    isActive = false, 
+    onClick,
+    sx = {} 
+}) => {
+    const handleClick = useCallback((e) => {
+        if (onClick) {
+            onClick(item, e);
+        }
+    }, [item, onClick]);
+
     return (
         <StyledNavButton
             component={Link}
             to={item.path}
             className={isActive ? 'active' : ''}
-            onClick={onClick}
+            onClick={handleClick}
             aria-current={isActive ? 'page' : undefined}
+            sx={sx}
         >
             {item.label}
         </StyledNavButton>
     );
+});
+
+NavigationItem.displayName = 'NavigationItem';
+
+const useActiveNavigation = () => {
+    const location = useLocation();
+    return location.pathname;
 };
 
+const useBrandSearch = (brands, minSearchLength = 2) => {
+    const [searchValue, setSearchValue] = useState('');
+    
+    const filteredBrands = useMemo(() => {
+        if (searchValue.length < minSearchLength) return brands;
+        return brands.filter(brand =>
+            brand.toLowerCase().includes(searchValue.toLowerCase())
+        );
+    }, [brands, searchValue, minSearchLength]);
+
+    const clearSearch = useCallback(() => {
+        setSearchValue('');
+    }, []);
+
+    return {
+        searchValue,
+        setSearchValue,
+        filteredBrands,
+        clearSearch,
+        hasSearch: searchValue.length >= minSearchLength,
+    };
+};
 // ==================== NAVIGATION BAR COMPONENT ====================
 /**
  * Navigation Bar Component
@@ -141,20 +223,35 @@ export const NavigationItem = ({ item, isActive = false, onClick }) => {
  * @param {string} currentPath - Current active path
  * @param {function} onItemClick - Item click handler
  */
-export const NavigationBar = ({ items, currentPath, onItemClick }) => {
+export const NavigationBar = React.memo(({ 
+    items = [], 
+    currentPath,
+    onItemClick,
+    sx = {} 
+}) => {
+    const activePath = useActiveNavigation();
+    const activePathToUse = currentPath || activePath;
+
     return (
-        <nav role="navigation" aria-label="Main navigation">
+        <Box
+            component="nav"
+            role="navigation"
+            aria-label="Main navigation"
+            sx={{ display: 'flex', alignItems: 'center', gap: 1, ...sx }}
+        >
             {items.map((item) => (
                 <NavigationItem
                     key={item.path}
                     item={item}
-                    isActive={currentPath === item.path}
-                    onClick={() => onItemClick?.(item)}
+                    isActive={activePathToUse === item.path}
+                    onClick={onItemClick}
                 />
             ))}
-        </nav>
+        </Box>
     );
-};
+});
+
+NavigationBar.displayName = 'NavigationBar';
 
 // ==================== BRAND MENU COMPONENT ====================
 /**
@@ -164,66 +261,94 @@ export const NavigationBar = ({ items, currentPath, onItemClick }) => {
  * @param {boolean} showSearch - Whether to show search field
  * @param {function} onBrandSelect - Brand selection handler
  */
-export const BrandMenu = ({ 
+// ==================== ENHANCED BRAND MENU COMPONENT ====================
+/**
+ * Enhanced BrandMenu Component with improved UX
+ */
+export const BrandMenu = React.memo(({ 
     brands = [],
     groupByLetter = false,
     showSearch = true,
     onBrandSelect,
     buttonProps = {},
     menuProps = {},
+    isLoading = false,
+    buttonText = "ALL BRANDS"
 }) => {
     const navigate = useNavigate();
     const [anchorEl, setAnchorEl] = useState(null);
-    const [searchValue, setSearchValue] = useState('');
+    const { 
+        searchValue, 
+        setSearchValue, 
+        filteredBrands, 
+        clearSearch,
+        hasSearch 
+    } = useBrandSearch(brands, 1);
+    
     const open = Boolean(anchorEl);
 
+    // Auto-enable search for large brand lists
+    const shouldShowSearch = showSearch && brands.length > 8;
+    // Auto-enable grouping for very large lists
+    const shouldGroupByLetter = groupByLetter || brands.length > 25;
+
     // Handlers
-    const handleOpen = (event) => {
+    const handleOpen = useCallback((event) => {
         setAnchorEl(event.currentTarget);
-    };
+    }, []);
 
-    const handleClose = () => {
+    const handleClose = useCallback(() => {
         setAnchorEl(null);
-        setSearchValue('');
-    };
+        clearSearch();
+    }, [clearSearch]);
 
-    const handleBrandClick = (brand) => {
+    const handleBrandClick = useCallback((brand) => {
         if (onBrandSelect) {
             onBrandSelect(brand);
         } else {
-            navigate(`/brands/${brand.toLowerCase()}`);
+            navigate(`/brands/${brand.toLowerCase().replace(/\s+/g, '-')}`);
         }
         handleClose();
-    };
+    }, [onBrandSelect, navigate, handleClose]);
 
-    // Filter brands based on search
-    const filteredBrands = brands.filter(brand =>
-        brand.toLowerCase().includes(searchValue.toLowerCase())
-    );
+    const handleViewAllBrands = useCallback(() => {
+        navigate('/brands');
+        handleClose();
+    }, [navigate, handleClose]);
 
     // Group brands by first letter if requested
-    const groupedBrands = groupByLetter
-        ? filteredBrands.reduce((acc, brand) => {
+    const groupedBrands = useMemo(() => {
+        if (!shouldGroupByLetter) {
+            return { '': filteredBrands };
+        }
+
+        return filteredBrands.reduce((acc, brand) => {
             const firstLetter = brand[0].toUpperCase();
             if (!acc[firstLetter]) {
                 acc[firstLetter] = [];
             }
             acc[firstLetter].push(brand);
             return acc;
-        }, {})
-        : { '': filteredBrands };
+        }, {});
+    }, [filteredBrands, shouldGroupByLetter]);
+
+    // Sort grouped brands alphabetically
+    const sortedGroupEntries = useMemo(() => {
+        return Object.entries(groupedBrands).sort(([a], [b]) => a.localeCompare(b));
+    }, [groupedBrands]);
 
     // Transform expand icon
-    const expandIconTransform = {
+    const expandIconTransform = useMemo(() => ({
         transition: 'transform 0.3s ease',
         transform: open ? 'rotate(180deg)' : 'rotate(0deg)',
-    };
+    }), [open]);
 
     return (
         <>
             <Button
                 onClick={handleOpen}
-                endIcon={<ExpandMore sx={expandIconTransform} />}
+                endIcon={isLoading ? <CircularProgress size={16} /> : <ExpandMore sx={expandIconTransform} />}
+                disabled={isLoading}
                 sx={{
                     color: '#333333',
                     fontSize: '16px',
@@ -233,13 +358,16 @@ export const BrandMenu = ({
                     '&:hover': {
                         backgroundColor: 'rgba(0, 0, 0, 0.04)',
                     },
+                    '&:disabled': {
+                        color: 'text.disabled',
+                    },
                     ...buttonProps.sx,
                 }}
                 aria-haspopup="true"
                 aria-expanded={open}
                 {...buttonProps}
             >
-                ALL BRANDS
+                {buttonText}
             </Button>
 
             <StyledMenu
@@ -253,7 +381,7 @@ export const BrandMenu = ({
                 {...menuProps}
             >
                 {/* Search Field */}
-                {showSearch && brands.length > 10 && (
+                {shouldShowSearch && (
                     <Box sx={{ p: 2, pb: 1 }}>
                         <SearchField
                             fullWidth
@@ -270,61 +398,70 @@ export const BrandMenu = ({
                             }}
                             autoFocus
                         />
+                        {hasSearch && (
+                            <Typography variant="caption" sx={{ mt: 1, display: 'block', color: 'text.secondary' }}>
+                                {filteredBrands.length} brand{filteredBrands.length !== 1 ? 's' : ''} found
+                            </Typography>
+                        )}
                     </Box>
                 )}
 
                 {/* Brands List */}
                 <Box sx={{ maxHeight: 300, overflow: 'auto' }}>
-                    {Object.entries(groupedBrands).map(([letter, brandList]) => (
-                        <BrandGroup key={letter}>
-                            {groupByLetter && letter && (
-                                <GroupTitle>{letter}</GroupTitle>
-                            )}
-                            {brandList.map((brand) => (
-                                <BrandMenuItem
-                                    key={brand}
-                                    onClick={() => handleBrandClick(brand)}
-                                >
-                                    <Typography>{brand}</Typography>
-                                </BrandMenuItem>
-                            ))}
-                        </BrandGroup>
-                    ))}
+                    {sortedGroupEntries.length > 0 ? (
+                        sortedGroupEntries.map(([letter, brandList]) => (
+                            <BrandGroup key={letter || 'ungrouped'}>
+                                {shouldGroupByLetter && letter && (
+                                    <GroupTitle>{letter}</GroupTitle>
+                                )}
+                                {brandList.map((brand) => (
+                                    <BrandMenuItem
+                                        key={brand}
+                                        onClick={() => handleBrandClick(brand)}
+                                    >
+                                        <Typography>{brand}</Typography>
+                                    </BrandMenuItem>
+                                ))}
+                            </BrandGroup>
+                        ))
+                    ) : (
+                        /* No results message */
+                        <Box sx={{ p: 3, textAlign: 'center' }}>
+                            <Typography variant="body2" color="text.secondary">
+                                {hasSearch ? 'No brands found' : 'No brands available'}
+                            </Typography>
+                        </Box>
+                    )}
                 </Box>
 
-                {/* No results message */}
-                {filteredBrands.length === 0 && (
-                    <Box sx={{ p: 3, textAlign: 'center' }}>
-                        <Typography variant="body2" color="text.secondary">
-                            No brands found
-                        </Typography>
+                {/* Footer - View all brands link */}
+                {brands.length > 10 && (
+                    <Box
+                        sx={{
+                            borderTop: 1,
+                            borderColor: 'divider',
+                            p: 1.5,
+                            textAlign: 'center',
+                        }}
+                    >
+                        <Button
+                            size="small"
+                            onClick={handleViewAllBrands}
+                            sx={{ 
+                                textTransform: 'none',
+                                fontWeight: 500,
+                            }}
+                        >
+                            View all {brands.length} brands
+                        </Button>
                     </Box>
                 )}
-
-                {/* View all brands link */}
-                <Box
-                    sx={{
-                        borderTop: 1,
-                        borderColor: 'divider',
-                        p: 1,
-                        textAlign: 'center',
-                    }}
-                >
-                    <Button
-                        size="small"
-                        onClick={() => {
-                            navigate('/brands');
-                            handleClose();
-                        }}
-                        sx={{ textTransform: 'none' }}
-                    >
-                        View all brands
-                    </Button>
-                </Box>
             </StyledMenu>
         </>
     );
-};
+});
+
+BrandMenu.displayName = 'BrandMenu';
 
 // ==================== SELL WITH US COMPONENT ====================
 /**
@@ -332,25 +469,51 @@ export const BrandMenu = ({
  * @param {function} onClick - Click handler
  * @param {object} sx - Additional styles
  */
-export const SellWithUs = ({ onClick, sx = {} }) => {
+export const SellWithUs = React.memo(({ 
+    onClick, 
+    sx = {},
+    href = '/sell-with-us',
+    variant = 'filled' // 'filled' | 'outlined'
+}) => {
+    const navigate = useNavigate();
+    
+    const handleClick = useCallback(() => {
+        if (onClick) {
+            onClick();
+        } else {
+            navigate(href);
+        }
+    }, [onClick, navigate, href]);
+
     return (
         <Chip
             label="SELL WITH US"
-            onClick={onClick}
+            onClick={handleClick}
+            variant={variant}
             sx={{
-                backgroundColor: '#333333',
-                color: 'white',
+                backgroundColor: variant === 'filled' ? '#333333' : 'transparent',
+                color: variant === 'filled' ? 'white' : '#333333',
+                border: variant === 'outlined' ? '1px solid #333333' : 'none',
                 fontWeight: 'bold',
                 fontSize: '12px',
                 cursor: 'pointer',
+                transition: 'all 0.3s ease',
                 '&:hover': {
-                    backgroundColor: '#555555',
+                    backgroundColor: variant === 'filled' ? '#555555' : 'rgba(51, 51, 51, 0.04)',
+                    transform: 'translateY(-1px)',
+                },
+                '&:active': {
+                    transform: 'translateY(0)',
                 },
                 ...sx
             }}
+            role="button"
+            tabIndex={0}
         />
     );
-};
+});
+
+SellWithUs.displayName = 'SellWithUs';
 
 // ==================== COMPLETE NAVIGATION COMPONENT ====================
 /**
@@ -360,12 +523,15 @@ export const SellWithUs = ({ onClick, sx = {} }) => {
  * @param {string} currentPath - Current active path
  * @param {object} handlers - Event handlers object
  */
-export const CompleteNavigation = ({ 
-    brands, 
-    navItems, 
+export const CompleteNavigation = React.memo(({ 
+    brands = [], 
+    navItems = [], 
     currentPath,
-    handlers,
+    handlers = {},
     showSellWithUs = true,
+    brandMenuProps = {},
+    navigationProps = {},
+    sellWithUsProps = {},
     sx = {}
 }) => {
     return (
@@ -375,29 +541,44 @@ export const CompleteNavigation = ({
                 justifyContent: 'space-between',
                 alignItems: 'center',
                 width: '100%',
+                gap: 2,
                 ...sx 
             }}
         >
             {/* Left side - Brands and Navigation */}
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                <BrandMenu
-                    brands={brands}
-                    groupByLetter={brands.length > 20}
-                    showSearch={brands.length > 10}
-                    onBrandSelect={handlers?.handleBrandClick}
-                />
+            <Box sx={{ 
+                display: 'flex', 
+                alignItems: 'center', 
+                gap: { xs: 1, md: 2 },
+                flex: 1 
+            }}>
+                {brands.length > 0 && (
+                    <BrandMenu
+                        brands={brands}
+                        onBrandSelect={handlers?.handleBrandClick}
+                        {...brandMenuProps}
+                    />
+                )}
                 
-                <NavigationBar
-                    items={navItems}
-                    currentPath={currentPath}
-                    onItemClick={handlers?.handleNavClick}
-                />
+                {navItems.length > 0 && (
+                    <NavigationBar
+                        items={navItems}
+                        currentPath={currentPath}
+                        onItemClick={handlers?.handleNavClick}
+                        {...navigationProps}
+                    />
+                )}
             </Box>
 
             {/* Right side - Sell with us */}
             {showSellWithUs && (
-                <SellWithUs onClick={handlers?.handleSellWithUs} />
+                <SellWithUs 
+                    onClick={handlers?.handleSellWithUs} 
+                    {...sellWithUsProps}
+                />
             )}
         </Box>
     );
-};
+});
+
+CompleteNavigation.displayName = 'CompleteNavigation';
